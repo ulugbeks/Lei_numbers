@@ -34,40 +34,98 @@
 	<!-- breadcrumb-area-end -->
 
 	<!-- contact-area -->
-	<section class="inner-contact-area pt-120 pb-120">
-		<div class="container">
-			<div class="row align-items-center">
-				<div class="col-lg-6">
-					<div class="inner-contact-img">
-						<img src="assets/img/images/contact_img.jpg" alt="">
-					</div>
-				</div>
-				<div class="col-lg-6">
+<section class="contact-area contact-bg" data-background="assets/img/bg/contact_bg.jpg">
+	<div class="container">
+		<div class="row align-items-center">
+			<div class="col-lg-5">
 					<div class="inner-contact-info">
 						<h2 class="title">Our Office Address</h2>
 						<div class="contact-info-item">
-							<h5 class="title-two">USA Office</h5>
+							<h5 class="title-two">UK Office</h5>
 							<ul class="list-wrap">
-								<li>100 Wilshire Blvd, Suite 700 Santa <br> Monica, CA 90401, USA</li>
-								<li>+1 (310) 620-8565</li>
-								<li>info@gmail.com</li>
+								<li>International House <br>6 South Molton St. London EW1K 5QF,<br> United Kingdom</li>
+								<li>+44 20 8040 0288</li>
+								<li>info@registerlei.org</li>
 							</ul>
 						</div>
-						<div class="contact-info-item">
+						<!-- <div class="contact-info-item">
 							<h5 class="title-two">Australia Office</h5>
 							<ul class="list-wrap">
 								<li>100 Wilshire Blvd, Suite 700 Santa <br> Monica, CA 90401, USA</li>
-								<li>+1 (310) 620-8565</li>
-								<li>info@gmail.com</li>
+								<li>+44 20 8040 0288</li>
+								<li>info@registerlei.org</li>
 							</ul>
-						</div>
+						</div> -->
 					</div>
+				</div>
+			<div class="col-lg-7">
+				<div class="contact-form">
+					<form id="register-form" action="{{ url('/contact-submit') }}" method="POST" class="register-form">
+						@csrf
+						<div class="row">
+							<!-- First Name -->
+							<div class="col-md-6">
+								<div class="form-grp">
+									<input type="text" name="first_name" placeholder="First Name *" required>
+								</div>
+							</div>
+							<!-- Last Name -->
+							<div class="col-md-6">
+								<div class="form-grp">
+									<input type="text" name="last_name" placeholder="Last Name *" required>
+								</div>
+							</div>
+							<!-- Company Name -->
+							<div class="col-md-12">
+								<div class="form-grp">
+									<input type="text" name="company_name" placeholder="Company Name *">
+								</div>
+							</div>
+							<!-- Country -->
+							<div class="col-md-12">
+								<div class="form-grp">
+									<select name="country" id="country" class="form-control-custom select2" required>
+										<option value="" disabled selected>Select Your Country...</option>
+										@foreach (config('countries') as $code => $name)
+										<option value="{{ $code }}" data-code="{{ strtolower($code) }}">{{ $name }}</option>
+										@endforeach
+									</select>
+								</div>
+							</div>
+							<!-- Email -->
+							<div class="col-md-6">
+								<div class="form-grp">
+									<input type="email" name="email" placeholder="E-mail *" required>
+								</div>
+							</div>
+							<!-- Phone -->
+							<div class="col-md-6">
+								<div class="form-grp">
+									<input type="tel" name="phone" id="phone" placeholder="Phone number *" class="form-control-custom" required>
+								</div>
+							</div>
+							<!-- Agreement Checkbox -->
+							<div class="col-md-12">
+								<div class="form-grp">
+									<input type="checkbox" id="terms" name="terms" required>
+									<label for="terms">
+										I have read and accept the <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a>
+									</label>
+								</div>
+							</div>
+						</div>
+						<button type="submit">Submit Now</button>
+					</form>
+
 				</div>
 			</div>
 		</div>
-	</section>
-	<!-- contact-area-end -->
-
+	</div>
+	<div class="contact-shape">
+		<img src="assets/img/images/contact_shape.png" alt="">
+	</div>
+</section>
+<!-- contact-area-end -->
 
 	<!-- contact-map -->
 	<div class="contact-map">

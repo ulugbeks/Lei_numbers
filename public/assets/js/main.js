@@ -992,61 +992,352 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-// Tab functionality
 document.addEventListener('DOMContentLoaded', function() {
-    const tabs = document.querySelectorAll('.tab-custom');
+    // Tab switching functionality
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
     
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Remove active class from all tabs and content
-            document.querySelectorAll('.tab-custom').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.content-custom').forEach(c => c.classList.remove('active'));
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const tabId = button.getAttribute('data-tab');
             
-            // Add active class to clicked tab
-            tab.classList.add('active');
+            // Remove active class from all buttons and contents
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
             
-            // Show corresponding content
-            const contentId = tab.getAttribute('data-tab');
-            document.getElementById(contentId).classList.add('active');
+            // Add active class to current button and content
+            button.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
         });
     });
     
-    // Price card selection
-    document.querySelectorAll('.plan-card').forEach(card => {
+    // Plan selection functionality
+    const planCards = document.querySelectorAll('.plan-card');
+    
+    planCards.forEach(card => {
         card.addEventListener('click', () => {
-            document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+            // Remove selected class from all cards
+            planCards.forEach(c => c.classList.remove('selected'));
+            
+            // Add selected class to clicked card
             card.classList.add('selected');
+            
+            // Update plan information if needed
+            updatePlanSummary(card);
         });
     });
-});
-
-
-/* */
-document.addEventListener("DOMContentLoaded", function () {
-    function handleFormSubmit(event, formId) {
-        event.preventDefault();
-
-        let formData = new FormData(document.querySelector(formId));
-
-        fetch(document.querySelector(formId).action, {
-            method: "POST",
-            body: formData,
-            headers: {
-                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success && data.order_id) {
-                window.location.href = `/thank-you-for-the-lei-application/?order=${data.order_id}`;
-            } else {
-                alert("Error: " + (data.message || "Unknown error"));
-            }
-        })
-        .catch(error => console.error("Error:", error));
+    
+    function updatePlanSummary(selectedCard) {
+        const planTitle = selectedCard.querySelector('.plan-title').textContent;
+        const planTotal = selectedCard.querySelector('.plan-total').textContent;
+        
+        // If there's a summary section, update it
+        // This can be expanded based on your needs
+        console.log(`Selected plan: ${planTitle}, ${planTotal}`);
     }
-
-    document.querySelector("#register-form").addEventListener("submit", function (event) {
-        handleFormSubmit(event, "#register-form");
+    
+    // Multi-step form navigation
+    const steps = document.querySelectorAll('.step-section');
+    const progressSteps = document.querySelectorAll('.progress-step');
+    const nextButtons = document.querySelectorAll('.next-step-btn');
+    const prevButtons = document.querySelectorAll('.prev-step-btn');
+    
+    // Function to show specific step
+    function showStep(stepNumber) {
+        // Hide all steps
+        steps.forEach(step => step.classList.remove('active'));
+        
+        // Show the target step
+        document.getElementById(`step-${stepNumber}`).classList.add('active');
+        
+        // Update progress indicator
+        progressSteps.forEach(step => {
+            const stepNum = parseInt(step.getAttribute('data-step'));
+            if (stepNum <= stepNumber) {
+                step.classList.add('active');
+            } else {
+                step.classList.remove('active');
+            }
+        });
+        
+        // Scroll to top of the form
+        document.querySelector('.pricing-item-wrap').scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+    
+    // Next button click handlers
+    nextButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const nextStep = button.getAttribute('data-goto');
+            
+            // If on step 2, validate the form before proceeding
+            if (button.closest('#step-2')) {
+                const form = document.getElementById('register-form');
+                if (validateForm(form)) {
+                    showStep(nextStep);
+                }
+            } else {
+                showStep(nextStep);
+            }
+        });
+    });
+    
+    // Previous button click handlers
+    prevButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const prevStep = button.getAttribute('data-goto');
+            showStep(prevStep);
+        });
+    });
+    
+    // Form validation
+    function validateForm(form) {
+        let isValid = true;
+        const requiredFields = form.querySelectorAll('[required]');
+        
+        // Remove previous validation messages
+        const oldMessages = form.querySelectorAll('.validation-message');
+        oldMessages.forEach(msg => msg.remove());
+        
+        // Reset field styles
+        form.querySelectorAll('input, select').forEach(field => {
+            field.classList.remove('is-invalid');
+        });
+        
+        // Check each required field
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                isValid = false;
+                field.classList.add('is-invalid');
+                
+                // Create validation message
+                const validationMsg = document.createElement('div');
+                validationMsg.className = 'validation-message';
+                validationMsg.textContent = 'This field is required';
+                validationMsg.style.color = 'var(--secondary)';
+                validationMsg.style.fontSize = '12px';
+                validationMsg.style.marginTop = '5px';
+                
+                // Insert after the field or its parent if inside input-with-icon
+                const parent = field.closest('.input-with-icon') || field.parentElement;
+                parent.appendChild(validationMsg);
+            }
+        });
+        
+        // Check email format
+        const emailField = form.querySelector('input[type="email"]');
+        if (emailField && emailField.value.trim()) {
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(emailField.value)) {
+                isValid = false;
+                emailField.classList.add('is-invalid');
+                
+                const validationMsg = document.createElement('div');
+                validationMsg.className = 'validation-message';
+                validationMsg.textContent = 'Please enter a valid email address';
+                validationMsg.style.color = 'var(--secondary)';
+                validationMsg.style.fontSize = '12px';
+                validationMsg.style.marginTop = '5px';
+                
+                const parent = emailField.closest('.input-with-icon') || emailField.parentElement;
+                parent.appendChild(validationMsg);
+            }
+        }
+        
+        // If validation fails, scroll to first invalid field
+        if (!isValid) {
+            const firstInvalid = form.querySelector('.is-invalid');
+            if (firstInvalid) {
+                firstInvalid.focus();
+                firstInvalid.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+        }
+        
+        return isValid;
+    }
+    
+    // Form submission handlers
+    const registerForm = document.getElementById('register-form');
+    const renewForm = document.getElementById('renew-form');
+    const transferForm = document.getElementById('transfer-form');
+    
+    if (registerForm) {
+        registerForm.addEventListener('submit', function(e) {
+            if (!validateForm(this)) {
+                e.preventDefault();
+            } else {
+                // Add loading state to button
+                const submitBtn = this.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                    
+                    // Re-enable button after 3 seconds if the form is not actually submitted
+                    // This would be removed in a real implementation
+                    setTimeout(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalText;
+                    }, 3000);
+                }
+            }
+        });
+    }
+    
+    if (renewForm) {
+        renewForm.addEventListener('submit', function(e) {
+            if (!validateForm(this)) {
+                e.preventDefault();
+            } else {
+                // Add loading state to button
+                const submitBtn = this.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                }
+            }
+        });
+    }
+    
+    if (transferForm) {
+        transferForm.addEventListener('submit', function(e) {
+            if (!validateForm(this)) {
+                e.preventDefault();
+            } else {
+                // Add loading state to button
+                const submitBtn = this.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                }
+            }
+        });
+    }
+    
+    // Add input validation on blur
+    const formInputs = document.querySelectorAll('input[required], select[required]');
+    
+    formInputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            if (!this.value.trim()) {
+                this.classList.add('is-invalid');
+                
+                // Check if validation message already exists
+                const parent = this.closest('.input-with-icon') || this.parentElement;
+                let validationMsg = parent.querySelector('.validation-message');
+                
+                if (!validationMsg) {
+                    validationMsg = document.createElement('div');
+                    validationMsg.className = 'validation-message';
+                    validationMsg.textContent = 'This field is required';
+                    validationMsg.style.color = 'var(--secondary)';
+                    validationMsg.style.fontSize = '12px';
+                    validationMsg.style.marginTop = '5px';
+                    parent.appendChild(validationMsg);
+                }
+            }
+        });
+        
+        input.addEventListener('focus', function() {
+            this.classList.remove('is-invalid');
+            
+            // Remove validation message if it exists
+            const parent = this.closest('.input-with-icon') || this.parentElement;
+            const validationMsg = parent.querySelector('.validation-message');
+            if (validationMsg) {
+                validationMsg.remove();
+            }
+        });
+    });
+    
+    // Format phone number input if it exists
+    const phoneInput = document.getElementById('phone');
+    
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            let value = this.value.replace(/\D/g, '');
+            
+            // Format the phone number
+            if (value.length > 0) {
+                if (value.length <= 3) {
+                    value = '+' + value;
+                } else if (value.length <= 6) {
+                    value = '+' + value.substring(0, 1) + ' (' + value.substring(1);
+                } else if (value.length <= 9) {
+                    value = '+' + value.substring(0, 1) + ' (' + value.substring(1, 4) + ') ' + value.substring(4);
+                } else {
+                    value = '+' + value.substring(0, 1) + ' (' + value.substring(1, 4) + ') ' + value.substring(4, 7) + '-' + value.substring(7, 11);
+                }
+            }
+            
+            this.value = value;
+        });
+    }
+    
+    // Add some animations to make the form more engaging
+    // Animate plan cards on page load
+    setTimeout(() => {
+        planCards.forEach((card, index) => {
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
+    }, 300);
+    
+    // Add initial styles for animation
+    planCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    });
+    
+    // CSS for validation styling
+    const style = document.createElement('style');
+    style.textContent = `
+        .is-invalid {
+            border-color: var(--secondary) !important;
+            background-color: rgba(229, 62, 62, 0.05);
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .fa-spinner {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Fix any links with ahref (if present in your HTML)
+    document.querySelectorAll('ahref').forEach(brokenLink => {
+        // Get the href and text content
+        const href = brokenLink.textContent || '#';
+        const text = brokenLink.textContent || 'Link';
+        
+        // Create a proper anchor element
+        const properLink = document.createElement('a');
+        properLink.href = href;
+        properLink.textContent = text;
+        
+        // Replace the broken link with the proper one
+        brokenLink.parentNode.replaceChild(properLink, brokenLink);
     });
 });

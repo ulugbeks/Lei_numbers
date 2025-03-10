@@ -2,15 +2,31 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        'first_name', 'last_name', 'company_name', 'country', 'email', 'phone'
+        'country',
+        'full_name',
+        'legal_entity_name',
+        'registration_id',
+        'email',
+        'phone',
+        'address',
+        'city',
+        'zip_code',
+        'selected_plan',
+        'amount',
+        'same_address',
+        'private_controlled',
+        'payment_status',
+        'document_path'
+    ];
+
+    protected $casts = [
+        'same_address' => 'boolean',
+        'private_controlled' => 'boolean',
+        'amount' => 'decimal:2'
     ];
 }
-

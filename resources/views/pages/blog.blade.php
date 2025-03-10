@@ -15,11 +15,11 @@
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="breadcrumb-content">
-						<h2 class="title">Latest Blog</h2>
+						<h2 class="title">Latest News</h2>
 						<nav aria-label="breadcrumb">
 							<ol class="breadcrumb">
 								<li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Blog</li>
+								<li class="breadcrumb-item active" aria-current="page">News</li>
 							</ol>
 						</nav>
 					</div>

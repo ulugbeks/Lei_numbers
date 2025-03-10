@@ -4,5 +4,7 @@ RewriteRule ^(.*)$ /public/$1 [L,QSA]
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteRule ^(.*)$ public/$1 [L]
+    # If the requested URI does not start with /public/, rewrite to /public/...
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ /public/$1 [L,QSA]
 </IfModule>

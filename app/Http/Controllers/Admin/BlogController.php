@@ -26,6 +26,10 @@ class BlogController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'author_name' => 'nullable|string|max:255',
+            'author_link' => 'nullable|url',
+            'published_at' => 'nullable|date',
+            'status' => 'required|boolean'
         ]);
 
         $imagePath = $request->file('image')->store('blog_images', 'public');
@@ -34,13 +38,15 @@ class BlogController extends Controller
             'title' => $request->title,
             'content' => $request->content,
             'image' => $imagePath,
+            'author_name' => $request->author_name,
+            'author_link' => $request->author_link,
             'status' => $request->status ?? 0,
             'published_at' => $request->published_at ?? now(),
         ]);
 
         session()->flash('success', 'Blog successfully created!');
 
-        return redirect()->route('admin.blogs')->with('success', 'Blog created successfully!');
+        return back()->with('success', 'Blog created successfully!');
     }
 
     public function edit($id)
@@ -57,6 +63,10 @@ class BlogController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'author_name' => 'nullable|string|max:255',
+            'author_link' => 'nullable|url',
+            'published_at' => 'nullable|date',
+            'status' => 'required|boolean'
         ]);
 
         if ($request->hasFile('image')) {
@@ -70,12 +80,15 @@ class BlogController extends Controller
             'title' => $request->title,
             'content' => $request->content,
             'image' => $imagePath,
-            'status' => $request->status ?? 0
+            'author_name' => $request->author_name,
+            'author_link' => $request->author_link,
+            'status' => $request->status ?? 0,
+            'published_at' => $request->published_at ?? now()
         ]);
 
         session()->flash('success', 'Blog successfully updated!');
 
-        return redirect()->route('admin.blogs')->with('success', 'Blog updated successfully!');
+        return back()->with('success', 'Blog updated successfully!');
     }
 
     public function destroy($id)
@@ -86,7 +99,7 @@ class BlogController extends Controller
 
         session()->flash('success', 'Blog successfully deleted!');
 
-        return redirect()->route('admin.blogs')->with('success', 'Blog deleted successfully!');
+        return back()->with('success', 'Blog deleted successfully!');
     }
 
     public function toggleStatus($id)

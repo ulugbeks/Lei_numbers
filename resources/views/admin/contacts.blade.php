@@ -3,7 +3,7 @@
 @section('title', 'Contacts')
 
 @section('content')
-<div class="container mt-4">
+<div class="container mt-4" style="max-width:100%;">
     <h1>Contact Requests</h1>
 
     <!-- Кнопки для экспорта -->
@@ -15,36 +15,51 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Company</th>
+                <th>#</th>
                 <th>Country</th>
+                <th>Full Name</th>
+                <th>Company</th>
+                <th>Registration ID</th>
                 <th>Email</th>
                 <th>Phone</th>
+                <th>Address</th>
+                <th>Plan</th>
+                <th>Amount</th>
+                <th>Status</th>
                 <th>Date</th>
-                <th>Actions</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($contacts as $contact)
-                <tr>
-                    <td>{{ $contact->id }}</td>
-                    <td>{{ $contact->first_name }}</td>
-                    <td>{{ $contact->last_name }}</td>
-                    <td>{{ $contact->company_name ?? 'N/A' }}</td>
-                    <td>{{ $contact->country }}</td>
-                    <td>{{ $contact->email }}</td>
-                    <td>{{ $contact->phone }}</td>
-                    <td>{{ $contact->created_at->format('Y-m-d H:i') }}</td>
-                    <td>
-                        <form action="{{ route('admin.contacts.destroy', $contact->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        </form>
-                    </td>
-                </tr>
+            @foreach($contacts as $contact)
+            <tr>
+                <td>{{$contact->id}}</td>
+                <td>{{$contact->country}}</td>
+                <td>{{$contact->full_name}}</td>
+                <td>{{ $contact->legal_entity_name ?: $contact->company_name }}</td>
+                <td>{{$contact->registration_id}}</td>
+                <td>{{$contact->email}}</td>
+                <td>{{$contact->phone}}</td>
+                <td>
+                    {{$contact->address}}, {{$contact->city}}, {{$contact->zip_code}}
+                </td>
+                <td>{{$contact->selected_plan}}</td>
+                <td>${{number_format($contact->amount, 2)}}</td>
+                <td>
+                    <span class="badge badge-{{$contact->payment_status == 'paid' ? 'success' : 'warning'}}">
+                        {{$contact->payment_status}}
+                    </span>
+                </td>
+                <td>{{$contact->created_at->format('Y-m-d')}}</td>
+                <td>
+                    <form action="{{route('admin.contact.destroy', $contact->id)}}" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                    <a href="{{ route('admin.contact.show', $contact->id) }}" class="btn btn-info btn-sm">View</a>
+                </td>
+            </tr>
             @endforeach
         </tbody>
     </table>

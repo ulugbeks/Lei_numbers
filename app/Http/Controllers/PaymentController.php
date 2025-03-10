@@ -1,32 +1,40 @@
-<?php 
+<?php
 
+namespace App\Http\Controllers;
+
+use App\Models\Contact;
 use Illuminate\Http\Request;
 use Stripe\Stripe;
-use Stripe\Charge;
-use App\Models\Order;
+use Stripe\PaymentIntent;
 
 class PaymentController extends Controller
 {
-    public function process(Request $request)
+    public function show($id)
     {
-        Stripe::setApiKey(env('STRIPE_SECRET'));
-
         try {
-            $charge = Charge::create([
-                "amount" => Order::find($request->order_id)->total_price * 100,
-                "currency" => "usd",
-                "source" => $request->stripeToken,
-                "description" => "LEI Registration Payment"
+            // Получаем контакт
+            $contact = Contact::findOrFail($id);
+
+            // Инициализация Stripe
+            Stripe::setApiKey(config('services.stripe.secret'));
+            
+            // Создание PaymentIntent
+            $paymentIntent = PaymentIntent::create([
+                'amount' => ($contact->amount + 21) * 100, // конвертация в центы
+                'currency' => 'usd',
+                'metadata' => [
+                    'contact_id' => $contact->id
+                ]
             ]);
 
-            // Обновляем заказ
-            $order = Order::find($request->order_id);
-            $order->status = 'paid';
-            $order->save();
+            return view('payment', [
+                'contact' => $contact,
+                'clientSecret' => $paymentIntent->client_secret
+            ]);
 
-            return response()->json(["success" => true]);
         } catch (\Exception $e) {
-            return response()->json(["success" => false, "message" => $e->getMessage()]);
+            \Log::error('Payment error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error loading payment page');
         }
     }
 }

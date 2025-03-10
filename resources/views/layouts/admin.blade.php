@@ -22,8 +22,19 @@
                     <a class="nav-link" href="{{ url('/backend/contacts') }}"><i class="fas fa-envelope"></i> Contacts</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.blogs') }}">
+                    <a class="nav-link" href="{{ route('admin.pages.index') }}">
+                        <i class="fas fa-newspaper"></i> Pages
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.blogs.index') }}">
                         <i class="fas fa-newspaper"></i> Blogs
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.payments') }}" class="nav-link">
+                        <i class="nav-icon fas fa-money-bill"></i>
+                        Payment Report
                     </a>
                 </li>
                 <li class="nav-item">
@@ -56,9 +67,21 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('admin.pages.index') }}" class="nav-link">
+                                <i class="nav-icon fas fa-envelope"></i>
+                                <p>Pages</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ url('/backend/blogs') }}" class="nav-link">
                                 <i class="nav-icon fas fa-newspaper"></i>
                                 <p>Blogs</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.payments') }}" class="nav-link">
+                                <i class="nav-icon fas fa-money-bill"></i>
+                                <p>Payment Report</p>
                             </a>
                         </li>
                     </ul>

@@ -19,7 +19,7 @@
 						<nav aria-label="breadcrumb">
 							<ol class="breadcrumb">
 								<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-								<li class="breadcrumb-item"><a href="{{ route('blog.index') }}">Blog</a></li>
+								<li class="breadcrumb-item"><a href="{{ route('blog.index') }}">News</a></li>
 								<li class="breadcrumb-item active" aria-current="page">{{ $blog->title }}</li>
 							</ol>
 						</nav>
@@ -47,7 +47,17 @@
 							<h2 class="title">{{ $blog->title }}</h2>
 							<div class="blog-meta-three">
 								<ul class="list-wrap">
-									<li><i class="far fa-calendar"></i> {{ $blog->created_at->format('d M, Y') }}</li>
+									<li><i class="far fa-calendar"></i> {{ $blog->published_at->format('F d, Y') }}</li>
+									<li>
+									    @if($blog->author_name)
+									        <img src="assets/img/blog/blog_avatar01.png" alt=""> by 
+									        @if($blog->author_link)
+									            <a href="{{ $blog->author_link }}">{{ $blog->author_name }}</a>
+									        @else
+									            {{ $blog->author_name }}
+									        @endif
+									    @endif
+									</li>
 								</ul>
 							</div>
 							{!! $blog->content !!}

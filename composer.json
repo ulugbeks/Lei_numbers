@@ -14,7 +14,8 @@
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.6",
         "maatwebsite/excel": "^3.1",
-        "spatie/laravel-sitemap": "*"
+        "spatie/laravel-sitemap": "*",
+        "stripe/stripe-php": "^16.5"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

@@ -54,9 +54,12 @@ class BlogController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+            'title' => 'required',
+            'content' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'author_name' => 'nullable|string|max:255',
+            'author_link' => 'nullable|url',
+            'published_at' => 'required|date'
         ]);
 
         $imagePath = null;
@@ -66,12 +69,49 @@ class BlogController extends Controller
 
         Blog::create([
             'title' => $request->title,
+            'slug' => Str::slug($request->title),
             'content' => $request->content,
             'image' => $imagePath,
-            'published_at' => now(),
+            'author_name' => $request->author_name,
+            'author_link' => $request->author_link,
+            'status' => $request->status ?? 0,
+            'published_at' => $request->published_at
         ]);
 
-        return redirect()->route('admin.blogs.index')->with('success', 'Blog post created successfully!');
+        return back()->with('success', 'Blog created successfully');
+    }
+
+    public function update(Request $request, Blog $blog)
+    {
+        $request->validate([
+            'title' => 'required',
+            'content' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'author_name' => 'nullable|string|max:255',
+            'author_link' => 'nullable|url',
+            'published_at' => 'required|date'
+        ]);
+
+        $data = [
+            'title' => $request->title,
+            'slug' => Str::slug($request->title),
+            'content' => $request->content,
+            'author_name' => $request->author_name,
+            'author_link' => $request->author_link,
+            'status' => $request->status ?? 0,
+            'published_at' => $request->published_at
+        ];
+
+        if ($request->hasFile('image')) {
+            // Удаляем старое изображение
+            Storage::disk('public')->delete($blog->image);
+            // Сохраняем новое
+            $data['image'] = $request->file('image')->store('blog_images', 'public');
+        }
+
+        $blog->update($data);
+
+        return back()->with('success', 'Blog updated successfully');
     }
 
 
@@ -86,6 +126,6 @@ class BlogController extends Controller
         }
         $blog->delete();
 
-        return redirect()->route('admin.blogs.index')->with('success', 'Blog post deleted successfully!');
+        return back()->with('success', 'Blog post deleted successfully!');
     }
 }

@@ -34,31 +34,43 @@
 	<!-- breadcrumb-area-end -->
 
 	<!-- about-area -->
-	<section class="about-area-eleven">
+	<section class="section-py-120">
 		<div class="container">
 			<div class="row align-items-center justify-content-center">
-				<div class="col-lg-6 col-md-9 order-0 order-lg-2">
-					<div class="about-img-wrap-eleven">
-						<img src="assets/img/images/inner_about_img05.png" alt="">
-						<img src="assets/img/images/inner_about_shape01.png" alt="" class="shape-one">
-						<img src="assets/img/images/inner_about_shape02.png" alt="" class="shape-two">
-					</div>
-				</div>
-				<div class="col-lg-6">
+				<div class="col-lg-12">
 					<div class="about-content-eleven">
-						<div class="section-title mb-30">
+						<!-- <div class="section-title mb-30">
 							<span class="sub-title">Who we are</span>
 							<h2 class="title">Best Digital Solution <br> Provider Agency</h2>
-						</div>
-						<p>when an unknown printer took a galley of type and scrambled it ake a type specimen book. when an unknown printer took a galley of type and scrambled it ake.</p>
+						</div> -->
+						<p>At Bedford Capital, we are dedicated to simplifying the Legal Entity Identifier (LEI) registration and renewal process for businesses, financial institutions, and organizations worldwide. We understand the importance of regulatory compliance in today’s financial landscape, and our goal is to provide a seamless, efficient, and transparent solution for obtaining and managing your LEI.</p>
+
+						<h2>Who We Are</h2>
+						<p>Bedford Capital is a trusted provider of LEI registration services, helping businesses meet international financial regulations. With a team of experienced professionals and a deep understanding of global compliance requirements, we ensure that our clients receive fast, reliable, and cost-effective LEI solutions.</p>
+						<h2>Our Mission</h2>
+						<p>Our mission is to empower businesses by making LEI registration and management simple, secure, and accessible. We believe in removing bureaucratic barriers and providing a streamlined process that saves time and effort.</p>
+						<h2>What We Offer</h2>
 						<div class="about-list-two">
 							<ul class="list-wrap">
-								<li><i class="fas fa-arrow-right"></i>Digital Creative Agency</li>
-								<li><i class="fas fa-arrow-right"></i>Professional Problem Solutions</li>
-								<li><i class="fas fa-arrow-right"></i>Web Design & Development</li>
+								<li><img src="assets/img/icons/check_icon.svg" alt=""> New LEI Registration – Quick and hassle-free application process for first-time LEI registrations.</li>
+								<li><img src="assets/img/icons/check_icon.svg" alt=""> LEI Renewal & Transfer – Easy renewal and transfer of existing LEIs to ensure continuous compliance.</li>
+								<li><img src="assets/img/icons/check_icon.svg" alt=""> Competitive Pricing – Affordable rates with no hidden fees or unexpected charges.</li>
+								<li><img src="assets/img/icons/check_icon.svg" alt=""> Customer Support – A dedicated team to assist you at every step of the process.</li>
+								<li><img src="assets/img/icons/check_icon.svg" alt=""> Regulatory Compliance Assurance – Stay compliant with financial regulations, including MiFID II, EMIR, and other global mandates.</li>
 							</ul>
 						</div>
-						<a href="services.html" class="btn btn-three">Take our Service</a>
+
+						<h2>Why Choose Us?</h2>
+						<div class="about-list-two">
+							<ul class="list-wrap">
+								<li><img src="assets/img/icons/check_icon.svg" alt=""> Speed & Efficiency – Get your LEI issued or renewed in just a few hours.</li>
+								<li><img src="assets/img/icons/check_icon.svg" alt=""> Global Reach – We serve clients across multiple industries and countries.</li>
+								<li><img src="assets/img/icons/check_icon.svg" alt=""> Security & Transparency – Your data is protected with the highest security standards.</li>
+								<li><img src="assets/img/icons/check_icon.svg" alt=""> Customer Support – A dedicated team to assist you at every step of the process.</li>
+								<li><img src="assets/img/icons/check_icon.svg" alt=""> User-Friendly Platform – A simple and intuitive system to manage your LEI with ease.</li>
+							</ul>
+						</div>
+						<p>At Bedford Capital, we are committed to providing top-notch LEI services so you can focus on what matters most—growing your business. Let us handle your LEI registration while you stay compliant and worry-free.</p>
 					</div>
 				</div>
 			</div>
@@ -66,177 +78,7 @@
 	</section>
 	<!-- about-area-end -->
 
-	<!-- about-area -->
-	<section class="about-area-six about-area-twelve">
-		<div class="container">
-			<div class="row align-items-center justify-content-center">
-				<div class="col-lg-6 col-md-10">
-					<div class="about-img-six about-img-twelve">
-						<img src="assets/img/images/h5_about_img.png" alt="">
-						<img src="assets/img/images/inner_about_shape03.png" alt="">
-						<img src="assets/img/images/h5_about_shape02.png" alt="">
-					</div>
-				</div>
-				<div class="col-lg-6">
-					<div class="about-content-six">
-						<div class="section-title section-title-three mb-30">
-							<span class="sub-title">Expertise areas</span>
-							<h2 class="title">Consulting Digital Agency specializing in This Field</h2>
-						</div>
-						<p>Advice on comprehensive legal solutions and legal planning on all aspects of business, including issues</p>
-						<div class="progress-wrap">
-							<div class="progress-item">
-								<h6 class="title">Child Insurance</h6>
-								<div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="55" aria-valuemin="0"
-								aria-valuemax="100">
-								<div class="progress-bar wow slideInLeft" data-wow-delay=".1s" style="width: 55%"><span>55%</span></div>
-							</div>
-						</div>
-						<div class="progress-item">
-							<h6 class="title">Insurance Claim</h6>
-							<div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="76" aria-valuemin="0"
-							aria-valuemax="100">
-							<div class="progress-bar wow slideInLeft" data-wow-delay=".2s" style="width: 76%"><span>76%</span></div>
-						</div>
-					</div>
-					<div class="progress-item">
-						<h6 class="title">Investment</h6>
-						<div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="90" aria-valuemin="0"
-						aria-valuemax="100">
-						<div class="progress-bar wow slideInLeft" data-wow-delay=".3s" style="width: 90%"><span>90%</span></div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-</div>
-</section>
-<!-- about-area-end -->
 
-<!-- cta-area -->
-<section class="cta-area-five">
-	<div class="container">
-		<div class="cta-inner-wrap-two" data-background="assets/img/bg/cta_bg02.jpg">
-			<div class="row align-items-center">
-				<div class="col-lg-9">
-					<div class="cta-content">
-						<div class="cta-info-wrap">
-							<div class="icon">
-								<i class="flaticon-phone-call"></i>
-							</div>
-							<div class="content">
-								<span>Call For More Info</span>
-								<a href="tel:0123456789">+123 8989 444</a>
-							</div>
-						</div>
-						<h2 class="title">Let’s Request a Schedule For Free Consultation</h2>
-					</div>
-				</div>
-				<div class="col-lg-3">
-					<div class="cta-btn text-end">
-						<a href="contact.html" class="btn btn-three">Contact Us</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
-<!-- cta-area-end -->
-
-<!-- team-area -->
-<section class="team-area-six">
-	<div class="container">
-		<div class="row justify-content-center">
-			<div class="col-lg-6">
-				<div class="section-title section-title-three text-center mb-50">
-					<span class="sub-title">Meet Our Team</span>
-					<h2 class="title">Experience Team Members</h2>
-					<p>Ever find yourself staring at your computer screen a good consulting slogan to come to minddestmentor area</p>
-				</div>
-			</div>
-		</div>
-		<div class="row justify-content-center">
-			<div class="col-xl-3 col-lg-4 col-md-6 col-sm-10">
-				<div class="team-item-five">
-					<div class="team-thumb-five">
-						<img src="assets/img/team/h5_team_img01.png" alt="">
-					</div>
-					<div class="team-content-five">
-						<h2 class="title"><a href="team-details.html">Brooklyn Simmons</a></h2>
-						<span>Finance Advisor</span>
-						<div class="team-social-four">
-							<ul class="list-wrap">
-								<li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-								<li><a href="#"><i class="fab fa-twitter"></i></a></li>
-								<li><a href="#"><i class="fab fa-instagram"></i></a></li>
-								<li><a href="#"><i class="fab fa-pinterest-p"></i></a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xl-3 col-lg-4 col-md-6 col-sm-10">
-				<div class="team-item-five">
-					<div class="team-thumb-five">
-						<img src="assets/img/team/h5_team_img02.png" alt="">
-					</div>
-					<div class="team-content-five">
-						<h2 class="title"><a href="team-details.html">Jenny Wilson</a></h2>
-						<span>Finance Advisor</span>
-						<div class="team-social-four">
-							<ul class="list-wrap">
-								<li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-								<li><a href="#"><i class="fab fa-twitter"></i></a></li>
-								<li><a href="#"><i class="fab fa-instagram"></i></a></li>
-								<li><a href="#"><i class="fab fa-pinterest-p"></i></a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xl-3 col-lg-4 col-md-6 col-sm-10">
-				<div class="team-item-five">
-					<div class="team-thumb-five">
-						<img src="assets/img/team/h5_team_img03.png" alt="">
-					</div>
-					<div class="team-content-five">
-						<h2 class="title"><a href="team-details.html">Wade Warren</a></h2>
-						<span>Finance Advisor</span>
-						<div class="team-social-four">
-							<ul class="list-wrap">
-								<li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-								<li><a href="#"><i class="fab fa-twitter"></i></a></li>
-								<li><a href="#"><i class="fab fa-instagram"></i></a></li>
-								<li><a href="#"><i class="fab fa-pinterest-p"></i></a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xl-3 col-lg-4 col-md-6 col-sm-10">
-				<div class="team-item-five">
-					<div class="team-thumb-five">
-						<img src="assets/img/team/h5_team_img04.png" alt="">
-					</div>
-					<div class="team-content-five">
-						<h2 class="title"><a href="team-details.html">Marvin McKinney</a></h2>
-						<span>Finance Advisor</span>
-						<div class="team-social-four">
-							<ul class="list-wrap">
-								<li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-								<li><a href="#"><i class="fab fa-twitter"></i></a></li>
-								<li><a href="#"><i class="fab fa-instagram"></i></a></li>
-								<li><a href="#"><i class="fab fa-pinterest-p"></i></a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
-<!-- team-area-end -->
 
 <!-- request-area -->
 <section class="request-area request-bg" data-background="assets/img/bg/request_bg.jpg">
@@ -244,12 +86,12 @@
 		<div class="row align-items-center">
 			<div class="col-lg-5">
 				<div class="request-content">
-					<h2 class="title">Let’s Request A Schedule For <br> Free Consultation</h2>
+					<h2 class="title">Get your LEI today! <br> Contact us to get started.</h2>
 				</div>
 			</div>
 			<div class="col-lg-7">
 				<div class="request-content-right">
-					<div class="request-contact">
+					<!-- <div class="request-contact">
 						<div class="icon">
 							<i class="flaticon-phone-call"></i>
 						</div>
@@ -257,9 +99,9 @@
 							<span>Hotline 24/7</span>
 							<a href="tel:0123456789">+123 8989 444</a>
 						</div>
-					</div>
+					</div> -->
 					<div class="request-btn">
-						<a href="contact.html" class="btn">Request a Schedule</a>
+						<a href="/contact/" class="btn">Send a request</a>
 					</div>
 				</div>
 			</div>

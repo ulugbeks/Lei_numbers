@@ -23,15 +23,15 @@
 				<div class="col-lg-7">
 					<div class="header-top-left">
 						<ul class="list-wrap">
-							<li><i class="flaticon-location"></i>256 Avenue, Mark Street, Newyork City</li>
-							<li><i class="flaticon-mail"></i><a href="mailto:gerow@gmail.com">gerow@gmail.com</a></li>
+							<li><i class="flaticon-location"></i>International House, 6 South Molton St. London EW1K 5QF, UK</li>
+							<li><i class="flaticon-mail"></i><a href="mailto:gerow@gmail.com">info@registerlei.org</a></li>
 						</ul>
 					</div>
 				</div>
 				<div class="col-lg-5">
 					<div class="header-top-right">
 						<div class="header-contact">
-							<a href="tel:0123456789"><i class="flaticon-phone-call"></i>+123 8989 444</a>
+							<a href="tel:0123456789"><i class="flaticon-phone-call"></i>+44 20 8040 0288</a>
 						</div>
 						<div class="header-social">
 							<ul class="list-wrap">
@@ -46,7 +46,7 @@
 			</div>
 		</div>
 	</div>
-	<div id="sticky-header" class="menu-area">
+	<div id="sticky-header" class="menu-area" style="background-color: #fff">
 		<div class="container">
 			<div class="row">
 				<div class="col-12">
@@ -54,15 +54,18 @@
 					<div class="menu-wrap">
 						<nav class="menu-nav">
 							<div class="logo">
-								<a href="/"><img src="{{ asset('assets/img/logo/logo.png') }}" alt="Logo"></a>
+								<a href="/"><img src="{{ asset('assets/img/logo/logo-black.svg') }}" alt="Logo"></a>
 							</div>
 							<div class="navbar-wrap main-menu d-none d-lg-flex">
 								<ul class="navigation">
 									<li class="active"><a href="/">Home</a>
 									</li>
+									<li>
+    									   <a class="nav-link" href="{{ url('/about-lei') }}">What is LEI</a>
+									</li>
 									<li><a href="/about/">About Us</a>
 									</li>
-									<li><a href="/blog/">Blog</a>
+									<li><a href="/news/">News</a>
 									</li>
 									<li><a href="/contact/">Contacts</a></li>
 								</ul>
@@ -70,7 +73,7 @@
 							<div class="header-action d-none d-md-block">
 								<ul class="list-wrap">
 									<li class="header-search"><a href="#"><i class="flaticon-search"></i></a></li>
-									<li class="header-btn"><a href="contact.html" class="btn btn-two">Get a Quote</a></li>
+									<li class="header-btn"><a href="/registration-lei/" class="btn btn-two">Apply for LEI</a></li>
 								</ul>
 							</div>
 						</nav>

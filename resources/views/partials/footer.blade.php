@@ -14,7 +14,7 @@
                                                     <i class="flaticon-pin"></i>
                                                 </div>
                                                 <div class="content">
-                                                    <p>58 Street Commercial Road Fratton, Australia</p>
+                                                    <p>International House, 6 South Molton St. London EW1K 5QF, United Kingdom</p>
                                                 </div>
                                             </li>
                                             <li>
@@ -22,7 +22,7 @@
                                                     <i class="flaticon-phone-call"></i>
                                                 </div>
                                                 <div class="content">
-                                                    <a href="tel:0123456789">+123 888 9999</a>
+                                                    <a href="tel:0123456789">+44 20 8040 0288</a>
                                                 </div>
                                             </li>
                                             <li>
@@ -42,11 +42,11 @@
                                     <h4 class="fw-title">Menu</h4>
                                     <div class="footer-link">
                                         <ul class="list-wrap">
-                                            <li><a href="about.html">Company</a></li>
-                                            <li><a href="contact.html">Careers</a></li>
-                                            <li><a href="contact.html">Press media</a></li>
-                                            <li><a href="blog.html">Our Blog</a></li>
-                                            <li><a href="contact.html">Privacy Policy</a></li>
+                                            <li><a href="about">About Us</a></li>
+                                            <li><a href="#">Register Lei</a></li>
+                                            <li><a href="/about-lei/">About LEI</a></li>
+                                            <li><a href="/blog/">Blog</a></li>
+                                            <li><a href="/contact/">Contacts</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -56,18 +56,18 @@
                                     <h4 class="fw-title">Quick Links</h4>
                                     <div class="footer-link">
                                         <ul class="list-wrap">
-                                            <li><a href="contact.html">How it’s Work</a></li>
-                                            <li><a href="contact.html">Partners</a></li>
-                                            <li><a href="contact.html">Testimonials</a></li>
-                                            <li><a href="contact.html">Case Studies</a></li>
-                                            <li><a href="contact.html">Pricing</a></li>
+                                            <li><a href="#">How it’s Work</a></li>
+                                            <li><a href="#">Partners</a></li>
+                                            <li><a href="#">Terms and Conditions</a></li>
+                                            <li><a href="#">Privacy Policy</a></li>
+                                            <li><a href="#">Cookies</a></li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-7">
                                 <div class="footer-widget">
-                                    <h4 class="fw-title">Subscribe to Our Newsletter</h4>
+                                    <h4 class="fw-title">Subscribe to our newsletter</h4>
                                     <div class="footer-newsletter">
                                         <p>Sign up to Privitar’s weekly newsletter to get the latest updates.</p>
                                         <form action="#">
@@ -85,10 +85,10 @@
                             <div class="col-md-6">
                                 <div class="left-sider">
                                     <div class="f-logo">
-                                        <a href="/"><img src="{{ asset('assets/img/logo/w_logo.png') }}" alt=""></a>
+                                        <a href="/"><img src="{{ asset('assets/img/logo/logo-light.svg') }}" alt=""></a>
                                     </div>
                                     <div class="copyright-text">
-                                        <p>Copyright © gerow | All Right Reserved</p>
+                                        <p>Copyright © Register Lei | All Right Reserved</p>
                                     </div>
                                 </div>
                             </div>
@@ -98,7 +98,6 @@
                                         <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
                                         <li><a href="#"><i class="fab fa-twitter"></i></a></li>
                                         <li><a href="#"><i class="fab fa-instagram"></i></a></li>
-                                        <li><a href="#"><i class="fab fa-pinterest-p"></i></a></li>
                                         <li><a href="#"><i class="fab fa-youtube"></i></a></li>
                                     </ul>
                                 </div>
