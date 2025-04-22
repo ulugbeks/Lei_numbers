@@ -96,6 +96,45 @@ class ContactController extends Controller
         }
     }
 
+    /**
+     * Process LEI renewal
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function renew(Request $request)
+    {
+        try {
+            $lei = $request->input('selected_lei');
+            $period = $request->input('renewal_period', 1);
+            
+            if (empty($lei)) {
+                return redirect()->back()->with('error', 'LEI code is required');
+            }
+            
+            // Validate LEI format
+            if (!preg_match('/^[A-Z0-9]{20}$/', $lei)) {
+                return redirect()->back()->with('error', 'Invalid LEI format');
+            }
+            
+            // Store renewal request in database (example)
+            $contact = new Contact();
+            $contact->type = 'renewal';
+            $contact->lei = $lei;
+            $contact->renewal_period = $period;
+            $contact->save();
+            
+            // Redirect to payment page
+            return redirect()->route('payment.show', [
+                'id' => $contact->id
+            ])->with('success', 'LEI renewal request received');
+            
+        } catch (\Exception $e) {
+            \Log::error('LEI renewal error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred during the renewal process');
+        }
+    }
+
     public function destroy($id)
     {
         try {

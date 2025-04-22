@@ -1256,28 +1256,28 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Format phone number input if it exists
-    const phoneInput = document.getElementById('phone');
+    // const phoneInput = document.getElementById('phone');
     
-    if (phoneInput) {
-        phoneInput.addEventListener('input', function(e) {
-            let value = this.value.replace(/\D/g, '');
+    // if (phoneInput) {
+    //     phoneInput.addEventListener('input', function(e) {
+    //         let value = this.value.replace(/\D/g, '');
             
-            // Format the phone number
-            if (value.length > 0) {
-                if (value.length <= 3) {
-                    value = '+' + value;
-                } else if (value.length <= 6) {
-                    value = '+' + value.substring(0, 1) + ' (' + value.substring(1);
-                } else if (value.length <= 9) {
-                    value = '+' + value.substring(0, 1) + ' (' + value.substring(1, 4) + ') ' + value.substring(4);
-                } else {
-                    value = '+' + value.substring(0, 1) + ' (' + value.substring(1, 4) + ') ' + value.substring(4, 7) + '-' + value.substring(7, 11);
-                }
-            }
+    //         // Format the phone number
+    //         if (value.length > 0) {
+    //             if (value.length <= 3) {
+    //                 value = '+' + value;
+    //             } else if (value.length <= 6) {
+    //                 value = '+' + value.substring(0, 1) + ' (' + value.substring(1);
+    //             } else if (value.length <= 9) {
+    //                 value = '+' + value.substring(0, 1) + ' (' + value.substring(1, 4) + ') ' + value.substring(4);
+    //             } else {
+    //                 value = '+' + value.substring(0, 1) + ' (' + value.substring(1, 4) + ') ' + value.substring(4, 7) + '-' + value.substring(7, 11);
+    //             }
+    //         }
             
-            this.value = value;
-        });
-    }
+    //         this.value = value;
+    //     });
+    // }
     
     // Add some animations to make the form more engaging
     // Animate plan cards on page load
@@ -1340,4 +1340,344 @@ document.addEventListener('DOMContentLoaded', function() {
         // Replace the broken link with the proper one
         brokenLink.parentNode.replaceChild(properLink, brokenLink);
     });
+});
+
+
+
+// Place this script in a separate JavaScript file and include it AFTER jQuery and CKEditor
+// For example: /public/js/faq-management.js
+
+$(function() {
+    console.log('FAQ Management Script Loaded');
+    
+    // Add regular FAQ item
+    $('#add-faq').on('click', function() {
+        console.log('Add FAQ button clicked');
+        var count = $('#faq-container .faq-item').length + 1;
+        var newItemId = 'faq-' + new Date().getTime();
+        
+        var newItem = 
+            '<div class="card mb-3 faq-item">' +
+                '<div class="card-header bg-light d-flex justify-content-between align-items-center">' +
+                    '<h6 class="mb-0">FAQ Item #' + count + '</h6>' +
+                    '<button type="button" class="btn btn-sm btn-danger remove-faq">Remove</button>' +
+                '</div>' +
+                '<div class="card-body">' +
+                    '<div class="mb-3">' +
+                        '<label class="form-label">Question</label>' +
+                        '<input type="text" name="faq_question[]" class="form-control">' +
+                    '</div>' +
+                    '<div class="mb-3">' +
+                        '<label class="form-label">Answer</label>' +
+                        '<textarea id="' + newItemId + '" name="faq_answer[]" class="form-control" rows="3"></textarea>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+        
+        $('#faq-container').append(newItem);
+        
+        // Initialize CKEditor for the new textarea
+        CKEDITOR.replace(newItemId, {
+            height: 200,
+            filebrowserUploadUrl: faqConfig.uploadUrl,
+            filebrowserUploadMethod: 'form'
+        });
+    });
+    
+    // Add About LEI FAQ item
+    $('#add-aboutlei-faq').on('click', function() {
+        console.log('Add About LEI FAQ button clicked');
+        var count = $('#aboutlei-faq-container .faq-item').length + 1;
+        var newItemId = 'aboutlei-faq-' + new Date().getTime();
+        
+        var newItem = 
+            '<div class="card mb-3 faq-item">' +
+                '<div class="card-header bg-light d-flex justify-content-between align-items-center">' +
+                    '<h6 class="mb-0">FAQ Item #' + count + '</h6>' +
+                    '<button type="button" class="btn btn-sm btn-danger remove-faq">Remove</button>' +
+                '</div>' +
+                '<div class="card-body">' +
+                    '<div class="mb-3">' +
+                        '<label class="form-label">Question</label>' +
+                        '<input type="text" name="aboutlei_faq_question[]" class="form-control">' +
+                    '</div>' +
+                    '<div class="mb-3">' +
+                        '<label class="form-label">Answer</label>' +
+                        '<textarea id="' + newItemId + '" name="aboutlei_faq_answer[]" class="form-control" rows="3"></textarea>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+        
+        $('#aboutlei-faq-container').append(newItem);
+        
+        // Initialize CKEditor for the new textarea
+        CKEDITOR.replace(newItemId, {
+            height: 200,
+            filebrowserUploadUrl: faqConfig.uploadUrl,
+            filebrowserUploadMethod: 'form'
+        });
+    });
+    
+    // Remove FAQ item (using event delegation for dynamically added elements)
+    $(document).on('click', '.remove-faq', function() {
+        console.log('Remove FAQ button clicked');
+        var faqItem = $(this).closest('.faq-item');
+        
+        // Find textarea and destroy CKEditor instance if exists
+        var textarea = faqItem.find('textarea');
+        if (textarea.length && textarea.attr('id') && CKEDITOR.instances[textarea.attr('id')]) {
+            CKEDITOR.instances[textarea.attr('id')].destroy();
+        }
+        
+        // Remove the FAQ item
+        faqItem.remove();
+    });
+});
+
+
+
+// popup
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab switching functionality
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Get the tab ID this button controls
+            const tabId = this.getAttribute('data-tab');
+            
+            // Remove active class from all tab buttons
+            tabButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked button
+            this.classList.add('active');
+            
+            // Hide all tab contents
+            const allTabContents = document.querySelectorAll('.tab-content');
+            allTabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Show the selected tab content
+            const selectedTab = document.getElementById(tabId);
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+        });
+    });
+    
+    // Step navigation in Register tab
+    const nextButtons = document.querySelectorAll('.next-step-btn');
+    const prevButtons = document.querySelectorAll('.prev-step-btn');
+    
+    nextButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const nextStepNumber = this.getAttribute('data-goto');
+            goToStep(nextStepNumber);
+        });
+    });
+    
+    prevButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const prevStepNumber = this.getAttribute('data-goto');
+            goToStep(prevStepNumber);
+        });
+    });
+    
+    function goToStep(stepNumber) {
+        // Hide all step sections
+        const allStepSections = document.querySelectorAll('.step-section');
+        allStepSections.forEach(section => {
+            section.classList.remove('active');
+        });
+        
+        // Show the target step section
+        const targetStep = document.getElementById('step-' + stepNumber);
+        if (targetStep) {
+            targetStep.classList.add('active');
+        }
+        
+        // Update step indicators
+        const allStepIndicators = document.querySelectorAll('.progress-step');
+        allStepIndicators.forEach(indicator => {
+            const indicatorStep = indicator.getAttribute('data-step');
+            if (parseInt(indicatorStep) <= parseInt(stepNumber)) {
+                indicator.classList.add('active');
+            } else {
+                indicator.classList.remove('active');
+            }
+        });
+    }
+    
+    // Popup functionality for Bulk Registration
+    const openBulkPopupBtn = document.getElementById('open-bulk-popup');
+    const closeBulkPopupBtn = document.getElementById('close-bulk-popup');
+    const bulkPopupOverlay = document.getElementById('bulk-popup-overlay');
+    
+    if (openBulkPopupBtn) {
+        openBulkPopupBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (bulkPopupOverlay) {
+                bulkPopupOverlay.classList.add('active');
+            }
+        });
+    }
+    
+    if (closeBulkPopupBtn && bulkPopupOverlay) {
+        closeBulkPopupBtn.addEventListener('click', function() {
+            bulkPopupOverlay.classList.remove('active');
+        });
+    }
+    
+    if (bulkPopupOverlay) {
+        bulkPopupOverlay.addEventListener('click', function(e) {
+            if (e.target === bulkPopupOverlay) {
+                bulkPopupOverlay.classList.remove('active');
+            }
+        });
+    }
+
+    // Initialize select2 for bulk form if you're using select2 plugin
+    if(typeof $.fn !== 'undefined' && typeof $.fn.select2 !== 'undefined') {
+        $('#bulk-country').select2({
+            dropdownParent: $('#bulk-popup-overlay')
+        });
+    }
+});
+
+
+
+
+
+
+
+// Add direct form submission with redirect handling
+document.addEventListener('DOMContentLoaded', function() {
+    const registerForm = document.getElementById('register-form');
+    
+    if (registerForm) {
+        console.log('Registration form found, adding redirect handler');
+        
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent the default form submission
+            console.log('Registration form submitted, handling manually');
+            
+            // Show loading state
+            const submitBtn = registerForm.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                submitBtn.disabled = true;
+            }
+            
+            // Create form data object
+            const formData = new FormData(registerForm);
+            
+            // Submit form using fetch
+            fetch(registerForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                redirect: 'manual' // Don't automatically follow redirects
+            })
+            .then(response => {
+                console.log('Server response received:', response);
+                
+                // Check if we got a redirect
+                if (response.type === 'opaqueredirect' || response.redirected) {
+                    // If redirected, get the URL from the Location header or response.url
+                    const redirectUrl = response.url || response.headers.get('Location');
+                    console.log('Redirecting to:', redirectUrl);
+                    
+                    if (redirectUrl) {
+                        window.location.href = redirectUrl;
+                    } else {
+                        // If no redirect URL is found but we know it's a redirect,
+                        // try to extract the ID from the form data and build the URL
+                        const orderId = registerForm.querySelector('input[name="id"]')?.value || 
+                                       Math.floor(Date.now() / 1000); // Fallback to timestamp
+                        
+                        console.log('No redirect URL found, trying fallback to /payment/' + orderId);
+                        window.location.href = '/payment/' + orderId;
+                    }
+                    return;
+                }
+                
+                // If we get a response with status 200, try to parse it
+                if (response.ok) {
+                    console.log('Form submitted successfully, checking content type');
+                    
+                    // Check content type
+                    const contentType = response.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        return response.json().then(data => {
+                            console.log('JSON response:', data);
+                            
+                            // Check if JSON contains a redirect URL
+                            if (data.redirect) {
+                                console.log('JSON redirect to:', data.redirect);
+                                window.location.href = data.redirect;
+                            } else {
+                                // If successful but no redirect, show success message
+                                alert('Registration successful!');
+                                window.location.reload();
+                            }
+                        });
+                    } else {
+                        return response.text().then(text => {
+                            console.log('Text response');
+                            // For HTML responses, we could be getting an error page
+                            // Try to extract any error message
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(text, 'text/html');
+                            const errorMsg = doc.querySelector('.alert-danger')?.textContent || 
+                                          'Unknown error occurred';
+                            
+                            console.error('Server returned HTML with potential error:', errorMsg);
+                            
+                            // Show error message
+                            alert('Registration error: ' + errorMsg);
+                            
+                            // Reset button
+                            if (submitBtn) {
+                                submitBtn.innerHTML = 'CONFIRM & CONTINUE';
+                                submitBtn.disabled = false;
+                            }
+                        });
+                    }
+                } else {
+                    // Handle error response
+                    console.error('Server error:', response.status);
+                    return response.text().then(text => {
+                        console.error('Error response text:', text);
+                        
+                        // Show error message
+                        alert('Registration error: ' + response.status + ' - ' + response.statusText);
+                        
+                        // Reset button
+                        if (submitBtn) {
+                            submitBtn.innerHTML = 'CONFIRM & CONTINUE';
+                            submitBtn.disabled = false;
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+                
+                // Show error message
+                alert('An error occurred while submitting the form. Please try again.');
+                
+                // Reset button
+                if (submitBtn) {
+                    submitBtn.innerHTML = 'CONFIRM & CONTINUE';
+                    submitBtn.disabled = false;
+                }
+            });
+        });
+    }
 });

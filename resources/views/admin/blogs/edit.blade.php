@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Edit Blog</h1>
+    <h1>Edit Article</h1>
     <form action="{{ route('admin.blogs.update', $blog->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         <label>Title *</label>

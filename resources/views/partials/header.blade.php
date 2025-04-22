@@ -24,14 +24,14 @@
 					<div class="header-top-left">
 						<ul class="list-wrap">
 							<li><i class="flaticon-location"></i>International House, 6 South Molton St. London EW1K 5QF, UK</li>
-							<li><i class="flaticon-mail"></i><a href="mailto:gerow@gmail.com">info@registerlei.org</a></li>
+							<li><i class="flaticon-mail"></i><a href="mailto:gerow@gmail.com">info@lei-register.co.uk</a></li>
 						</ul>
 					</div>
 				</div>
 				<div class="col-lg-5">
 					<div class="header-top-right">
 						<div class="header-contact">
-							<a href="tel:0123456789"><i class="flaticon-phone-call"></i>+44 20 8040 0288</a>
+							<a href="mailto:info@lei-register.co.uk"><i class="flaticon-mail"></i> info@lei-register.co.uk</a>
 						</div>
 						<div class="header-social">
 							<ul class="list-wrap">
@@ -57,18 +57,45 @@
 								<a href="/"><img src="{{ asset('assets/img/logo/logo-black.svg') }}" alt="Logo"></a>
 							</div>
 							<div class="navbar-wrap main-menu d-none d-lg-flex">
-								<ul class="navigation">
-									<li class="active"><a href="/">Home</a>
-									</li>
-									<li>
-    									   <a class="nav-link" href="{{ url('/about-lei') }}">What is LEI</a>
-									</li>
-									<li><a href="/about/">About Us</a>
-									</li>
-									<li><a href="/news/">News</a>
-									</li>
-									<li><a href="/contact/">Contacts</a></li>
-								</ul>
+								@php
+								// Render the main menu using the MenuHelper
+								$mainMenu = App\Models\Menu::where('name', 'main menu')->orWhere('location', 'header')->where('active', true)->first();
+								
+								if ($mainMenu && $mainMenu->rootItems()->where('active', true)->count() > 0) {
+									$menuItems = $mainMenu->rootItems()->where('active', true)->orderBy('order')->with(['children' => function($query) {
+										$query->where('active', true)->orderBy('order');
+									}])->get();
+									@endphp
+									<ul class="navigation">
+										@foreach($menuItems as $item)
+										<li class="{{ request()->is(ltrim($item->url, '/')) ? 'active' : '' }}">
+											<a href="{{ $item->url }}" @if($item->target == '_blank') target="_blank" @endif>
+												@if($item->icon)
+												<i class="{{ $item->icon }}"></i>
+												@endif
+												{{ $item->title }}
+											</a>
+											
+											@if($item->hasChildren())
+											<ul class="submenu">
+												@foreach($item->children as $child)
+												<li class="{{ request()->is(ltrim($child->url, '/')) ? 'active' : '' }}">
+													<a href="{{ $child->url }}" @if($child->target == '_blank') target="_blank" @endif>
+														@if($child->icon)
+														<i class="{{ $child->icon }}"></i>
+														@endif
+														{{ $child->title }}
+													</a>
+												</li>
+												@endforeach
+											</ul>
+											@endif
+										</li>
+										@endforeach
+									</ul>
+									@php
+								}
+								@endphp
 							</div>
 							<div class="header-action d-none d-md-block">
 								<ul class="list-wrap">
@@ -84,7 +111,7 @@
 						<nav class="menu-box">
 							<div class="close-btn"><i class="fas fa-times"></i></div>
 							<div class="nav-logo">
-								<a href="index.html"><img src="assets/img/logo/logo.png" alt="Logo"></a>
+								<a href="index.html"><img src="{{ asset('assets/img/logo/logo-black.svg') }}"></a>
 							</div>
 							<div class="mobile-search">
 								<form action="#">
@@ -138,4 +165,4 @@
 	<!-- header-search-end -->
 
 </header>
-        <!-- header-area-end -->
+<!-- header-area-end -->

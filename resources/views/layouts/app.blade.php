@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>@yield('title')</title>
-    <meta name="description" content="">
+    
+    <!-- SEO Component (replaces individual meta tags) -->
+    <x-seo :page="$page ?? null" />
+    
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="icon" type="image/icon" href="{{ asset('assets/img/favicon.png') }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/icon" href="{{ asset('assets/img/lei-favicon.png') }}">
+    
     <!-- CSS Here -->
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/animate.min.css') }}">
@@ -24,7 +29,6 @@
     <link rel="stylesheet" href="{{ asset('assets/css/responsive.css') }}">
     <link href="{{ asset('assets/css/select2.css') }}?v={{ time() }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css">
-    <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" /> -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.6/css/flag-icon.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 
@@ -58,6 +62,11 @@
 <script src="{{ asset('assets/js/aos.js') }}"></script>
 <script src="{{ asset('assets/js/wow.min.js') }}"></script>
 <script src="{{ asset('assets/js/main.js') }}?v={{ time() }}"></script>
+<script src="{{ asset('assets/js/gleif-integration.js') }}?v={{ time() }}"></script>
+<script src="{{ asset('assets/js/gleif-lookup-tool.js') }}?v={{ time() }}"></script>
+<script src="{{ asset('assets/js/gleif-validation-helper.js') }}?v={{ time() }}"></script>
+<script src="{{ asset('assets/js/renew-tab-fix.js') }}?v={{ time() }}"></script>
+<script src="{{ asset('assets/js/transfer-tab-fix.js') }}?v={{ time() }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://js.stripe.com/v3/"></script>
 

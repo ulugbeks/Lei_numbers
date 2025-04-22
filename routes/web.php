@@ -11,39 +11,64 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\BlogController as FrontBlogController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
-use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\PageController as AdminPageController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\GleifController; 
 
 Auth::routes();
 
+// Front-end dynamic page routes
+Route::get('/', [PageController::class, 'home'])->name('home');
+Route::get('/about', [PageController::class, 'about'])->name('about');
+Route::get('/contact', [PageController::class, 'contact'])->name('contact');
+Route::get('/about-lei', [PageController::class, 'aboutLei'])->name('about-lei');
+Route::get('/registration-lei', [PageController::class, 'registrationLei'])->name('registration-lei');
+Route::get('/cookies', [PageController::class, 'cookies'])->name('cookies');
+Route::get('/terms-and-conditions', [PageController::class, 'terms'])->name('terms-and-conditions');
+Route::get('/privacy-policy', [PageController::class, 'privacy'])->name('privacy-policy');
 
-Route::get('/', function () {
-    return view('index');
-})->name('home');
+// News routes
+Route::get('/news', [FrontBlogController::class, 'blogList'])->name('blog.index');
+Route::get('/news/{slug}', [FrontBlogController::class, 'show'])->name('blog.show');
 
-Route::get('/about', function () {
-    return view('pages.about');
-});
+// GLEIF API routes - Add these new routes
+// In your routes/web.php or routes/api.php file
+Route::get('/gleif/search', 'GleifController@searchByName');
+Route::get('/api/gleif/search-name', [GleifController::class, 'searchByName'])->name('gleif.search.name');
+Route::get('/api/gleif/lei-details', [GleifController::class, 'getLeiDetails'])->name('gleif.lei.details');
+Route::get('/api/gleif/search-registration', [GleifController::class, 'searchByRegistrationId'])->name('gleif.search.registration');
 
-Route::get('/news', function () {
-    return view('pages.blog');
-});
+// LEI Registration process routes - Add these new routes
+Route::post('/register-submit', [GleifController::class, 'processRegistration'])->name('register.submit');
+Route::post('/renew-submit', [GleifController::class, 'processRenewal'])->name('renew.submit');
+Route::post('/transfer-submit', [GleifController::class, 'processTransfer'])->name('transfer.submit');
+Route::post('/bulk-submit', [GleifController::class, 'processBulkRegistration'])->name('bulk.submit');
 
-Route::get('/news/{id}', function ($id) {
-    return view('pages.blog-details', ['id' => $id]);
-})->where('id', '[0-9]+'); 
+// Confirmation and processing pages for GLEIF - Add these new routes
+Route::get('/transfer/confirmation', function() {
+    return view('lei.transfer-confirmation');
+})->name('transfer.confirmation');
 
-Route::get('/contact', function () {
-    return view('pages.contact');
-});
+Route::get('/bulk/confirmation', function() {
+    return view('lei.bulk-confirmation');
+})->name('bulk.confirmation');
 
-Route::get('/about-lei', function () {
-    return view('pages.about-lei');
-});
+Route::get('/renew', function() {
+    return view('lei.renew', ['lei' => request('lei')]);
+})->name('renew.show');
 
-Route::get('/registration-lei', function () {
-    return view('pages.registration-lei');
-});
-
+// Custom pages route (for pages created through admin)
+Route::get('/{slug}', [PageController::class, 'show'])->name('page.show')
+    ->where('slug', '[a-z0-9\-]+')
+    ->where('slug', '!=', 'admin')
+    ->where('slug', '!=', 'backend')
+    ->where('slug', '!=', 'login')
+    ->where('slug', '!=', 'register')
+    ->where('slug', '!=', 'news')
+    ->where('slug', '!=', 'renew') // Add this exclusion for the new renew route
+    ->where('slug', '!=', 'transfer') // Add this exclusion for the new transfer route
+    ->where('slug', '!=', 'bulk'); // Add this exclusion for the new bulk route
 
 // Админка с отдельным шаблоном
 Route::middleware(['auth'])->group(function () {
@@ -51,7 +76,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/backend/contacts', [ContactController::class, 'index'])->name('admin.contacts');
 });
 
-
+// Admin contacts routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/backend/contacts', [ContactController::class, 'index'])->name('admin.contacts');
     Route::delete('/backend/contacts/{id}', [ContactController::class, 'destroy'])->name('admin.contacts.destroy');
@@ -59,15 +84,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/backend/contacts/export/xlsx', [ContactController::class, 'exportXlsx'])->name('admin.contacts.export.xlsx');
 });
 
-
-// Фронт-блог
-Route::get('/news', [FrontBlogController::class, 'blogList'])->name('blog.index');
-Route::get('/news/{slug}', [FrontBlogController::class, 'show'])->name('blog.show');
-
-
-// Админка для управления блогами
+// Admin pages management with correct class name
 Route::prefix('backend')->middleware(['auth'])->group(function () {
-    Route::get('/blogs', [AdminBlogController::class, 'index'])->name('admin.blogs.index'); // изменено name
+    // Blog management routes
+    Route::get('/blogs', [AdminBlogController::class, 'index'])->name('admin.blogs.index');
     Route::get('/blogs/create', [AdminBlogController::class, 'create'])->name('admin.blogs.create');
     Route::post('/blogs/store', [AdminBlogController::class, 'store'])->name('admin.blogs.store');
     Route::get('/blogs/edit/{id}', [AdminBlogController::class, 'edit'])->name('admin.blogs.edit');
@@ -75,17 +95,47 @@ Route::prefix('backend')->middleware(['auth'])->group(function () {
     Route::delete('/blogs/delete/{id}', [AdminBlogController::class, 'destroy'])->name('admin.blogs.destroy');
     Route::post('/blogs/status/{id}', [AdminBlogController::class, 'toggleStatus'])->name('admin.blogs.status');
     Route::post('/blogs/upload', [AdminBlogController::class, 'upload'])->name('admin.blogs.upload');
-    Route::get('/pages', [PageController::class, 'index'])->name('admin.pages.index');
-    Route::get('/pages/{id}/edit', [PageController::class, 'edit'])->name('admin.pages.edit');
-    Route::put('/pages/{id}', [PageController::class, 'update'])->name('admin.pages.update');
-    Route::post('/pages/upload-image', [PageController::class, 'uploadImage'])->name('admin.pages.upload-image');
+    
+    // Pages management routes - using the AdminPageController alias
+    Route::get('/pages', [AdminPageController::class, 'index'])->name('admin.pages.index');
+    Route::get('/pages/create', [AdminPageController::class, 'create'])->name('admin.pages.create');
+    Route::post('/pages', [AdminPageController::class, 'store'])->name('admin.pages.store');
+    Route::get('/pages/{id}/edit', [AdminPageController::class, 'edit'])->name('admin.pages.edit');
+    Route::put('/pages/{id}', [AdminPageController::class, 'update'])->name('admin.pages.update');
+    Route::delete('/pages/{id}', [AdminPageController::class, 'destroy'])->name('admin.pages.destroy');
+    Route::post('/pages/upload-image', [AdminPageController::class, 'uploadImage'])->name('admin.pages.upload-image');
+    
+    // Menu management routes
+    Route::prefix('menus')->name('admin.menus.')->group(function () {
+        Route::get('/', [MenuController::class, 'index'])->name('index');
+        Route::get('/create', [MenuController::class, 'create'])->name('create');
+        Route::post('/', [MenuController::class, 'store'])->name('store');
+        Route::get('/{menu}', [MenuController::class, 'show'])->name('show');
+        Route::get('/{menu}/edit', [MenuController::class, 'edit'])->name('edit');
+        Route::put('/{menu}', [MenuController::class, 'update'])->name('update');
+        Route::delete('/{menu}', [MenuController::class, 'destroy'])->name('destroy');
+        
+        // Menu items management
+        Route::get('/{menu}/items', [MenuController::class, 'items'])->name('items');
+        Route::post('/{menu}/items', [MenuController::class, 'storeItem'])->name('items.store');
+        Route::put('/items/{menuItem}', [MenuController::class, 'updateItem'])->name('items.update');
+        Route::delete('/items/{menuItem}', [MenuController::class, 'destroyItem'])->name('items.destroy');
+        Route::post('/items/reorder', [MenuController::class, 'reorderItems'])->name('items.reorder');
+
+        Route::match(['put', 'post'], '/items/{menuItem}', [MenuController::class, 'updateItem'])->name('items.update');
+    });
+    
+    // GLEIF-related admin routes - Add these new routes for admin panel
+    Route::get('/lei-transactions', [GleifController::class, 'adminTransactions'])->name('admin.lei.transactions');
+    Route::get('/lei-transactions/export', [GleifController::class, 'exportTransactions'])->name('admin.lei.export');
 });
 
-
-
+// Contact form submission
 Route::post('/contact-submit', [ContactController::class, 'store'])->name('contact.store');
-Route::post('/renew-submit', [ContactController::class, 'renew'])->name('contact.renew');
+//Route::post('/renew-submit', [ContactController::class, 'renew'])->name('contact.renew');
+Route::post('/renew-submit', [GleifController::class, 'processRenewal'])->name('renew.submit');
 
+// Admin routes
 Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/contacts', [ContactController::class, 'index'])->name('admin.contacts');
     Route::get('/contacts/{contact}', [ContactController::class, 'show'])->name('admin.contact.show');
@@ -95,5 +145,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/payments/export', [AdminController::class, 'exportPayments'])->name('admin.payments.export');
 });
 
+// Payment routes
 Route::get('/payment/{id}', [PaymentController::class, 'show'])->name('payment.show');
 Route::get('/payment/success/{paymentIntent}', [PaymentController::class, 'success'])->name('payment.success');
+//Route::get('/payment/{type}', [PaymentController::class, 'showByType'])->name('payment.show');

@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="container">
-    <h1>Blogs</h1>
-    <a href="{{ route('admin.blogs.create') }}" class="btn btn-primary">Add New Blog</a>
+    <h1>News</h1>
+    <a href="{{ route('admin.blogs.create') }}" class="btn btn-primary">Add New Article</a>
     <table class="table mt-4">
         <thead>
             <tr>
