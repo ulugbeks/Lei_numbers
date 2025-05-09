@@ -1558,7 +1558,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     const registerForm = document.getElementById('register-form');
     
-    if (registerForm) {
+    if (registerForm && !registerForm.hasAttribute('data-ajax-handled')) {
         console.log('Registration form found, adding redirect handler');
         
         registerForm.addEventListener('submit', function(e) {

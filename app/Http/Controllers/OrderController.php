@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
+use Stripe\StripeClient;
 
 class OrderController extends Controller
 {
@@ -34,15 +35,25 @@ class OrderController extends Controller
                 'payment_status' => 'pending',
             ]);
 
+            // === создаём PaymentIntent ===
+            $stripe = new StripeClient(config('services.stripe.secret'));
+            $intent = $stripe->paymentIntents->create([
+                'amount'   => $order->total_price * 100,     // в центах
+                'currency' => 'usd',
+                'metadata' => ['order_id' => $order->id],
+            ]);
+
+            // === возвращаем ID и client_secret ===
             return response()->json([
-                'success' => true,
-                'order_id' => $order->id
+                'success'      => true,
+                'order_id'     => $order->id,
+                'clientSecret' => $intent->client_secret,
             ], 200);
 
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }

@@ -9,12 +9,13 @@
                             <h4 class="fw-title">Information</h4>
                             <div class="footer-info">
                                 <ul class="list-wrap">
+                                    <h5 style="color: #fff;">Bedford Capital</h5>
                                     <li>
                                         <div class="icon">
                                             <i class="flaticon-pin"></i>
                                         </div>
                                         <div class="content">
-                                            <p>International House, 6 South Molton St. London EW1K 5QF, United Kingdom</p>
+                                            <p>International House, 6 South Molton St.<br> London EW1K 5QF, UK</p>
                                         </div>
                                     </li>
                                     <li>
