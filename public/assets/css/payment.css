@@ -1,0 +1,133 @@
+/* Payment Page Styles */
+
+.payment-page {
+    background-color: #f8f9fa;
+    min-height: 600px;
+}
+
+/* Plan selection styling */
+.plan-option {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid #213360;
+    border-radius: 5px;
+}
+
+.plan-option:hover {
+    border-color: #213360;
+    transform: translateY(-5px);
+    box-shadow: 1px 1px 16px 6px rgb(33 51 96 / 36%);
+}
+
+.plan-option.active {
+    border: 3px solid #213360;
+/*    background-color: #f0f7ff;*/
+    transform: translateY(-5px);
+    box-shadow: 1px 1px 20px 11px rgb(33 51 96 / 45%);
+}
+
+.plan-option .card-title {
+    font-weight: 600;
+}
+
+.plan-option .card-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+/* Service option styling */
+.service-option {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid #e9ecef;
+}
+
+.service-option:hover {
+    border-color: #007bff;
+}
+
+.service-option.active {
+    border: 3px solid #213360;
+    background-color: #2133600d;
+}
+
+.service-option .badge {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    padding: 0.3rem 0.6rem;
+}
+
+/* Stripe Elements styling */
+#card-element {
+    background-color: white;
+    padding: 10px 12px;
+    border-radius: 4px;
+    border: 1px solid #e7e7e7;
+    transition: box-shadow 150ms ease;
+}
+
+#card-element:focus {
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+#card-errors {
+    color: #dc3545;
+    font-size: 0.9rem;
+    margin-top: 8px;
+}
+
+/* Payment method selector */
+.payment-method-selector .btn-group {
+    width: 100%;
+}
+
+.payment-method-selector .btn {
+    font-weight: 500;
+    padding: 18px 18px 18px 22px!important;
+    background-color: #213360!important;
+    gap: 10px;
+}
+
+/* Benefits list styling */
+.benefits i {
+    color: #28a745;
+    font-size: 1.1rem;
+}
+
+/* Additional options */
+.additional-options {
+    font-size: 0.9rem;
+}
+
+.additional-options .form-check-input:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+/* Submit button */
+#submit-payment {
+    font-weight: 600;
+    /*padding: 0.75rem 1.5rem;*/
+    font-size: 1.5rem;
+    justify-content: space-between;
+}
+
+/* Success / Failed pages */
+.payment-success .fa-check-circle,
+.payment-failed .fa-times-circle {
+    font-size: 72px;
+}
+
+.payment-success .card,
+.payment-failed .card {
+    border: none;
+    border-radius: 10px;
+}
+
+.order-details {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}

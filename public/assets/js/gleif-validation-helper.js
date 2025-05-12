@@ -25,7 +25,7 @@ function initRegistrationFormHelpers() {
  * Initialize company name search and auto-completion
  */
 function initCompanyNameSearch() {
-    const companyNameInput = document.getElementById('legal_entity_name');
+    const companyNameInput = document.getElementById('legal_entity_name123');
     
     if (!companyNameInput) return;
     

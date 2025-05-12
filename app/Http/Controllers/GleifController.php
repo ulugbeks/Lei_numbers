@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use App\Mail\UserRegistrationConfirmation;
+use App\Mail\AdminRegistrationNotification;
+use Illuminate\Support\Facades\Mail;
 
 class GleifController extends Controller
 {
@@ -271,16 +274,22 @@ class GleifController extends Controller
             $contact->zip_code = $request->input('zip_code');
             $contact->selected_plan = $request->input('selected_plan');
             $contact->save();
+
+            // Send confirmation email to user
+            Mail::to($contact->email)->send(new UserRegistrationConfirmation($contact));
+            
+            // Send notification to admin
+            Mail::to(config('mail.admin_email', 'info@lei-register.co.uk'))
+                ->send(new AdminRegistrationNotification($contact));
             
             // Get the ID for redirection
-            $orderId = $contact->id;
+            $contactId = $contact->id;
             
             // Log the redirect attempt
             \Log::info('Redirecting to payment page', ['order_id' => $orderId]);
             
             // Perform a direct redirect instead of using named routes
-            return redirect("/payment/{$orderId}")
-                ->with('success', 'Registration submitted successfully');
+            return redirect()->route('payment.show', ['id' => $contactId]);
             
         } catch (\Exception $e) {
             // Log the error

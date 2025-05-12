@@ -46,7 +46,7 @@ return [
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
-            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
+            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'https://lei-register.co.uk'), PHP_URL_HOST)),
         ],
 
         'ses' => [
@@ -109,8 +109,9 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'no-reply@lei-register.co.uk'),
+        'name' => env('MAIL_FROM_NAME', 'Register LEI'),
+        'admin_email' => env('ADMIN_EMAIL', 'info@lei-register.co.uk'),
     ],
 
 ];

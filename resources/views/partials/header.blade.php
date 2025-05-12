@@ -24,7 +24,7 @@
 					<div class="header-top-left">
 						<ul class="list-wrap">
 							<li><i class="flaticon-location"></i>International House, 6 South Molton St. London EW1K 5QF, UK</li>
-							<li><i class="flaticon-mail"></i><a href="mailto:gerow@gmail.com">info@lei-register.co.uk</a></li>
+							<!-- <li><i class="flaticon-mail"></i><a href="mailto:gerow@gmail.com">info@lei-register.co.uk</a></li> -->
 						</ul>
 					</div>
 				</div>

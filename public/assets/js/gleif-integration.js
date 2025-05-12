@@ -125,61 +125,7 @@ function initLeiValidation() {
     });
 }
 
-/**
- * Initialize company name autocomplete with GLEIF data
- */
-function initCompanyAutocomplete() {
-    const companyNameInput = document.getElementById('legal_entity_name');
-    
-    if (!companyNameInput) return;
-    
-    // Create autocomplete results container
-    const autocompleteContainer = document.createElement('div');
-    autocompleteContainer.className = 'autocomplete-results';
-    companyNameInput.parentNode.appendChild(autocompleteContainer);
-    
-    let debounceTimeout;
-    
-    companyNameInput.addEventListener('input', function() {
-        const query = this.value.trim();
-        
-        // Clear previous timeout
-        clearTimeout(debounceTimeout);
-        
-        // Clear results if input is empty
-        if (!query) {
-            autocompleteContainer.innerHTML = '';
-            autocompleteContainer.style.display = 'none';
-            return;
-        }
-        
-        // Debounce API calls
-        debounceTimeout = setTimeout(() => {
-            // Only search if we have at least 3 characters
-            if (query.length >= 3) {
-                searchCompaniesByName(query)
-                    .then(results => {
-                        displayAutocompleteResults(results, autocompleteContainer, companyNameInput);
-                    })
-                    .catch(error => {
-                        console.error('Company search error:', error);
-                        autocompleteContainer.innerHTML = '';
-                        autocompleteContainer.style.display = 'none';
-                    });
-            } else {
-                autocompleteContainer.innerHTML = '';
-                autocompleteContainer.style.display = 'none';
-            }
-        }, 300); // 300ms debounce
-    });
-    
-    // Hide autocomplete when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!companyNameInput.contains(e.target) && !autocompleteContainer.contains(e.target)) {
-            autocompleteContainer.style.display = 'none';
-        }
-    });
-}
+
 
 /**
  * Initialize LEI transfer form validation

@@ -118,6 +118,13 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 hideLoader();
+                console.error('Form submission error details:', {
+                    status: status,
+                    error: error,
+                    responseText: xhr.responseText,
+                    responseJSON: xhr.responseJSON
+                });
+                
                 let errorMessage = 'An error occurred while submitting your registration.';
                 
                 if (xhr.responseJSON) {
@@ -129,7 +136,6 @@ $(document).ready(function() {
                 }
                 
                 showError(errorMessage);
-                console.error('Form submission error:', xhr);
             }
         });
     });
@@ -186,7 +192,11 @@ $(document).ready(function() {
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: message
+            text: message || 'An unexpected error occurred',
+            customClass: {
+                popup: 'my-swal-popup' // Add custom class if needed
+            },
+            buttonsStyling: true
         });
     }
 

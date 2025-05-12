@@ -1558,7 +1558,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     const registerForm = document.getElementById('register-form');
     
-    if (registerForm) {
+    if (registerForm && !registerForm.hasAttribute('data-ajax-handled')) {
         console.log('Registration form found, adding redirect handler');
         
         registerForm.addEventListener('submit', function(e) {
@@ -1680,4 +1680,240 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize service options
+    const completeService = document.getElementById('service-complete');
+    const standardService = document.getElementById('service-standard');
+    
+    // Function to update service selection UI
+    function updateServiceSelection(selectedService) {
+        // Remove active class from all services
+        [completeService, standardService].forEach(service => {
+            service.classList.remove('active');
+            
+            // Remove blue checkbox if it exists
+            const existingCheckbox = service.querySelector('.service-checkbox');
+            if (existingCheckbox) {
+                existingCheckbox.remove();
+            }
+        });
+        
+        // Add active class to selected service
+        selectedService.classList.add('active');
+        
+        // Add blue checkbox to selected service
+        const checkboxDiv = document.createElement('div');
+        checkboxDiv.className = 'service-checkbox';
+        checkboxDiv.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        checkboxDiv.style.position = 'absolute';
+        checkboxDiv.style.top = '10px';
+        checkboxDiv.style.right = '10px';
+        checkboxDiv.style.width = '36px';
+        checkboxDiv.style.height = '36px';
+        checkboxDiv.style.backgroundColor = '#0066ff';
+        checkboxDiv.style.borderRadius = '50%';
+        checkboxDiv.style.display = 'flex';
+        checkboxDiv.style.alignItems = 'center';
+        checkboxDiv.style.justifyContent = 'center';
+        selectedService.style.position = 'relative';
+        selectedService.appendChild(checkboxDiv);
+        
+        // Update state and calculate total
+        updateServiceState(selectedService.id === 'service-complete' ? 'complete' : 'standard');
+    }
+    
+    // Add click events to service options
+    completeService.addEventListener('click', function() {
+        updateServiceSelection(this);
+    });
+    
+    standardService.addEventListener('click', function() {
+        updateServiceSelection(this);
+    });
+    
+    // Initial setup - set the default selected service
+    if (completeService.classList.contains('active')) {
+        updateServiceSelection(completeService);
+    } else if (standardService.classList.contains('active')) {
+        updateServiceSelection(standardService);
+    } else {
+        // Default to standard if none is active
+        updateServiceSelection(standardService);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize service options
+    const completeService = document.getElementById('service-complete');
+    const standardService = document.getElementById('service-standard');
+    
+    // Function to update service selection UI
+    function updateServiceSelection(selectedService) {
+        // Remove active class from all services
+        [completeService, standardService].forEach(service => {
+            service.classList.remove('active');
+            
+            // Remove blue checkbox if it exists
+            const existingCheckbox = service.querySelector('.service-checkbox');
+            if (existingCheckbox) {
+                existingCheckbox.remove();
+            }
+        });
+        
+        // Add active class to selected service
+        selectedService.classList.add('active');
+        
+        // Add blue checkbox to selected service
+        const checkboxDiv = document.createElement('div');
+        checkboxDiv.className = 'service-checkbox';
+        checkboxDiv.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        checkboxDiv.style.position = 'absolute';
+        checkboxDiv.style.top = '10px';
+        checkboxDiv.style.right = '10px';
+        checkboxDiv.style.width = '36px';
+        checkboxDiv.style.height = '36px';
+        checkboxDiv.style.backgroundColor = '#0066ff';
+        checkboxDiv.style.borderRadius = '50%';
+        checkboxDiv.style.display = 'flex';
+        checkboxDiv.style.alignItems = 'center';
+        checkboxDiv.style.justifyContent = 'center';
+        selectedService.style.position = 'relative';
+        selectedService.appendChild(checkboxDiv);
+        
+        // Update state and calculate total
+        updateServiceState(selectedService.id === 'service-complete' ? 'complete' : 'standard');
+    }
+    
+    // Add click events to service options
+    completeService.addEventListener('click', function() {
+        updateServiceSelection(this);
+    });
+    
+    standardService.addEventListener('click', function() {
+        updateServiceSelection(this);
+    });
+    
+    // Initial setup - set the default selected service
+    if (completeService.classList.contains('active')) {
+        updateServiceSelection(standardService);
+    } else if (standardService.classList.contains('active')) {
+        updateServiceSelection(completeService);
+    } else {
+        // Default to standard if none is active
+        updateServiceSelection(completeService);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all plan cards
+    const planCards = document.querySelectorAll('.plan-card');
+    
+    // Function to update plan selection
+    function updatePlanSelection(selectedPlan) {
+        // Remove active class from all plans
+        planCards.forEach(plan => {
+            plan.classList.remove('active');
+        });
+        
+        // Add active class to selected plan
+        selectedPlan.classList.add('active');
+        
+        // Update state and hidden input
+        const planType = selectedPlan.getAttribute('data-plan');
+        document.getElementById('selected_plan').value = planType;
+        
+        // Update displayed amounts
+        updatePlanState(planType);
+    }
+    
+    // Add click events to plan cards
+    planCards.forEach(plan => {
+        plan.addEventListener('click', function() {
+            updatePlanSelection(this);
+        });
+    });
+    
+    // Function to update plan state and calculate amounts
+    function updatePlanState(planType) {
+        const prices = {
+            '1-year': 75,
+            '3-years': 165,
+            '5-years': 250
+        };
+        
+        const planAmount = prices[planType] || 75;
+        document.getElementById('plan-amount').textContent = '€' + planAmount.toFixed(2);
+        
+        // Update total
+        calculateTotal();
+    }
+    
+    // Function to update service state
+    function updateServiceState(serviceType) {
+        const serviceAmount = serviceType === 'complete' ? 21 : 0;
+        document.getElementById('service-amount').textContent = '€' + serviceAmount.toFixed(2);
+        
+        // Update total
+        calculateTotal();
+    }
+    
+    // Calculate total amount
+    function calculateTotal() {
+        // Get plan amount
+        const planText = document.getElementById('plan-amount').textContent;
+        const planAmount = parseFloat(planText.replace('€', '')) || 0;
+        
+        // Get service amount
+        const serviceText = document.getElementById('service-amount').textContent;
+        const serviceAmount = parseFloat(serviceText.replace('€', '')) || 0;
+        
+        // Calculate total
+        const total = planAmount + serviceAmount;
+        
+        // Update total display
+        document.getElementById('total-amount').textContent = '€' + total.toFixed(2);
+        
+        // Update button amount
+        const buttonAmount = document.getElementById('button-amount');
+        if (buttonAmount) {
+            buttonAmount.textContent = total.toFixed(2);
+        }
+    }
+});
+
+// Add toggle switch style checkboxes to plan options
+document.querySelectorAll('.plan-option').forEach(option => {
+    // Create checkbox element
+    const checkbox = document.createElement('div');
+    checkbox.className = 'plan-checkbox';
+    option.appendChild(checkbox);
+});
+
+// Plan option selection with toggle
+document.querySelectorAll('.plan-option').forEach(option => {
+    option.addEventListener('click', function() {
+        // Remove active class from all options
+        document.querySelectorAll('.plan-option').forEach(o => {
+            o.classList.remove('active');
+        });
+        
+        // Add active class to clicked option
+        this.classList.add('active');
+        
+        // Update state based on selected plan
+        const planId = this.id.replace('plan-', '');
+        
+        // Your plan selection logic here...
+        // Example:
+        if (planId === '1-year') {
+            // Update to 1-year plan
+        } else if (planId === '3-years') {
+            // Update to 3-year plan
+        } else if (planId === '5-years') {
+            // Update to 5-year plan
+        }
+    });
 });

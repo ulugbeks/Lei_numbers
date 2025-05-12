@@ -8,6 +8,7 @@ use App\Models\Contact;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OrderController;
+//use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\BlogController as FrontBlogController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
@@ -39,7 +40,8 @@ Route::get('/api/gleif/search-name', [GleifController::class, 'searchByName'])->
 Route::get('/api/gleif/lei-details', [GleifController::class, 'getLeiDetails'])->name('gleif.lei.details');
 Route::get('/api/gleif/search-registration', [GleifController::class, 'searchByRegistrationId'])->name('gleif.search.registration');
 
-// LEI Registration process routes - Add these new routes
+
+
 Route::post('/register-submit', [GleifController::class, 'processRegistration'])->name('register.submit');
 Route::post('/renew-submit', [GleifController::class, 'processRenewal'])->name('renew.submit');
 Route::post('/transfer-submit', [GleifController::class, 'processTransfer'])->name('transfer.submit');
@@ -148,4 +150,18 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 // Payment routes
 Route::get('/payment/{id}', [PaymentController::class, 'show'])->name('payment.show');
 Route::get('/payment/success/{paymentIntent}', [PaymentController::class, 'success'])->name('payment.success');
-//Route::get('/payment/{type}', [PaymentController::class, 'showByType'])->name('payment.show');
+Route::get('/payment/failed', [PaymentController::class, 'failed'])->name('payment.failed');
+Route::post('/payment/create-intent', [PaymentController::class, 'createIntent'])->name('payment.create-intent');
+Route::post('/webhook/stripe', [PaymentController::class, 'handleWebhook'])->name('webhook.stripe');
+
+
+// Registration form submission route
+Route::post('/register-submit', [GleifController::class, 'processRegistration'])->name('register.submit');
+
+// This should come AFTER the POST route
+Route::get('/register-submit', function() {
+    return view('pages.form-info', [
+        'message' => 'This URL is only for form submissions. Please use our registration form.'
+    ]);
+});
+
