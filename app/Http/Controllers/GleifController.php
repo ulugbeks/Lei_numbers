@@ -286,10 +286,18 @@ class GleifController extends Controller
             $contactId = $contact->id;
             
             // Log the redirect attempt
-            \Log::info('Redirecting to payment page', ['order_id' => $orderId]);
-            
-            // Perform a direct redirect instead of using named routes
-            return redirect()->route('payment.show', ['id' => $contactId]);
+            \Log::info('Redirecting to payment page', ['order_id' => $contactId]);
+
+            // If this is an AJAX/fetch request, return JSON
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success'  => true,
+                    'redirect' => route('payment.show', ['id' => $contactId]),
+                ]);
+            }
+
+           // Fallback: full-page redirect
+           return redirect()->route('payment.show', ['id' => $contactId]);
             
         } catch (\Exception $e) {
             // Log the error

@@ -100,33 +100,33 @@ $(document).ready(function() {
             processData: false,
             contentType: false,
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Accept': 'application/json'           // <-- запрос JSON-ответа
             },
             beforeSend: function() {
                 showLoader();
             },
             success: function(response) {
                 hideLoader();
-                if (response.status === 'success') {
-                    showSuccess(response.message);
+                if (response.success && response.redirect) {
+                    // Плавный редирект на URL, присланный сервером
                     setTimeout(() => {
-                        window.location.href = '/payment/' + response.contact_id;
-                    }, 1500);
+                        window.location.href = response.redirect;
+                    }, 500);
                 } else {
-                    showError(response.message);
+                    // если сервер возвращает success=false или нет redirect
+                    showError(response.message || 'Unknown error');
                 }
             },
-            error: function(xhr, status, error) {
+            error: function(xhr) {
                 hideLoader();
                 console.error('Form submission error details:', {
-                    status: status,
-                    error: error,
+                    status: xhr.status,
                     responseText: xhr.responseText,
                     responseJSON: xhr.responseJSON
                 });
-                
+
                 let errorMessage = 'An error occurred while submitting your registration.';
-                
                 if (xhr.responseJSON) {
                     if (xhr.responseJSON.errors) {
                         errorMessage = Object.values(xhr.responseJSON.errors).flat().join('\n');
@@ -134,11 +134,11 @@ $(document).ready(function() {
                         errorMessage = xhr.responseJSON.message;
                     }
                 }
-                
                 showError(errorMessage);
             }
         });
     });
+
 
     // Обработка формы обновления
     $('#renew-form').on('submit', function(e) {
