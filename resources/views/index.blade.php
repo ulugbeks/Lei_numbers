@@ -322,7 +322,7 @@
 
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <p class="upload-instruction">To verify announcement, please upload a document listing the legal entity's authorized representatives (e.g., board meeting minutes, articles of association):</p>
+                                                    <p class="upload-instruction">Upload your company excerpt</p>
                                                     <div class="upload-area">
                                                         <div class="upload-icon"><i class="fa fa-upload"></i></div>
                                                         <div class="upload-text">Browse files or drag and drop</div>
@@ -332,7 +332,7 @@
 
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <p class="upload-instruction">To verify announcement, please upload a document listing the legal entity's authorized representatives (e.g., board meeting minutes, articles of association):</p>
+                                                    <p class="upload-instruction">Upload your ID</p>
                                                     <div class="upload-area">
                                                         <div class="upload-icon"><i class="fa fa-upload"></i></div>
                                                         <div class="upload-text">Browse files or drag and drop</div>
