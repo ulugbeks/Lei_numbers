@@ -11,8 +11,8 @@ class ContactController extends Controller
 {
     private $planPrices = [
         '1-year' => 75.00,
-        '3-years' => 165.00,
-        '5-years' => 250.00
+        '3-years' => 195.00,
+        '5-years' => 275.00
     ];
 
     public function index()
@@ -27,7 +27,7 @@ class ContactController extends Controller
             $validatedData = $request->validate([
                 'country' => 'required',
                 'full_name' => 'required',
-                'legal_entity_name' => 'required|string|max:255', // добавляем это поле
+                'legal_entity_name' => 'required|string|max:255',
                 'registration_id' => 'required',
                 'email' => 'required|email',
                 'phone' => 'required',
@@ -48,7 +48,7 @@ class ContactController extends Controller
             $contact = Contact::create([
                 'country' => $validatedData['country'],
                 'full_name' => $validatedData['full_name'],
-                'legal_entity_name' => $validatedData['legal_entity_name'], // добавляем это поле
+                'legal_entity_name' => $validatedData['legal_entity_name'],
                 'registration_id' => $validatedData['registration_id'],
                 'email' => $validatedData['email'],
                 'phone' => $validatedData['phone'],

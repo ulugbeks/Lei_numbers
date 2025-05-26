@@ -113,10 +113,10 @@
                                             <h4 class="plan-title">1 year</h4>
                                         </div>
                                         <div class="plan-price">
-                                            <span class="currency">€</span>75
+                                            <span class="currency">£</span>75
                                             <span class="period">/ year</span>
                                         </div>
-                                        <div class="plan-total">Total €75</div>
+                                        <div class="plan-total">Total £75</div>
                                         <button class="plan-select-btn">Select Plan</button>
                                     </div>
                                     
@@ -126,10 +126,10 @@
                                             <h4 class="plan-title">3 years</h4>
                                         </div>
                                         <div class="plan-price">
-                                            <span class="currency">€</span>55
+                                            <span class="currency">£</span>65
                                             <span class="period">/ year</span>
                                         </div>
-                                        <div class="plan-total">Total €165</div>
+                                        <div class="plan-total">Total £195</div>
                                         <button class="plan-select-btn">Select Plan</button>
                                     </div>
                                     
@@ -138,10 +138,10 @@
                                             <h4 class="plan-title">5 years</h4>
                                         </div>
                                         <div class="plan-price">
-                                            <span class="currency">€</span>50
+                                            <span class="currency">£</span>55
                                             <span class="period">/ year</span>
                                         </div>
-                                        <div class="plan-total">Total €250</div>
+                                        <div class="plan-total">Total £275</div>
                                         <button class="plan-select-btn">Select Plan</button>
                                     </div>
                                 </div>

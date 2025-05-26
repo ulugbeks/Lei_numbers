@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use App\Mail\UserRegistrationConfirmation;
 use App\Mail\AdminRegistrationNotification;
 use Illuminate\Support\Facades\Mail;
+use App\Models\Contact;
 
 class GleifController extends Controller
 {
@@ -120,60 +121,103 @@ class GleifController extends Controller
         }
     }
     
+
     /**
      * Process LEI renewal
      *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response
      */
     public function processRenewal(Request $request)
     {
         try {
-            $lei = $request->input('selected_lei');
-            $period = $request->input('renewal_period', 1);
+            // Detailed logging of the incoming request
+            \Log::info('Renewal request received', $request->all());
+            
+            $lei = $request->input('lei');
+            $period = $request->input('renewal_period', '1-year');
+            
+            \Log::info('LEI and period extracted', ['lei' => $lei, 'period' => $period]);
             
             if (empty($lei)) {
+                \Log::warning('LEI code is missing in renewal request');
                 return redirect()->back()->with('error', 'LEI code is required');
             }
             
             // Validate LEI format
             if (!preg_match('/^[A-Z0-9]{20}$/', $lei)) {
+                \Log::warning('Invalid LEI format in renewal request', ['lei' => $lei]);
                 return redirect()->back()->with('error', 'Invalid LEI format');
             }
             
-            // Verify LEI exists and is eligible for renewal
-            $response = Http::get($this->apiUrl . '/lei-records/' . $lei);
+            // Log the contact creation attempt
+            \Log::info('Creating Contact model for renewal');
             
-            if ($response->status() === 404) {
-                return redirect()->back()->with('error', 'LEI not found');
+            // Create a new contact for the renewal
+            $contact = new \App\Models\Contact();
+            
+            // Check if Contact model was created
+            if (!$contact) {
+                \Log::error('Failed to create Contact model instance');
+                return redirect()->back()->with('error', 'System error: Failed to create contact record');
             }
             
-            if (!$response->successful()) {
-                Log::error('GLEIF API Error: ' . $response->body());
-                return redirect()->back()->with('error', 'Error verifying LEI with GLEIF');
+            \Log::info('Setting contact properties');
+            
+            // Fill required fields with default values if necessary
+            $contact->type = 'renewal';
+            $contact->legal_entity_name = $request->input('legal_entity_name', 'LEI Renewal');
+            $contact->registration_id = $lei;
+            $contact->email = $request->input('email', '');
+            $contact->phone = $request->input('phone', '');
+            $contact->country = $request->input('country', '');
+            $contact->address = $request->input('address', '');
+            $contact->city = $request->input('city', '');
+            $contact->zip_code = $request->input('zip_code', '');
+            $contact->selected_plan = $period;
+            $contact->payment_status = 'pending';
+            $contact->same_address = true;
+            $contact->private_controlled = false;
+            
+            // Set plan amount based on period
+            switch ($period) {
+                case '1-year':
+                    $contact->amount = 75.00;
+                    break;
+                case '3-years':
+                    $contact->amount = 195.00;
+                    break;
+                case '5-years':
+                    $contact->amount = 275.00;
+                    break;
+                default:
+                    $contact->amount = 75.00;
             }
             
-            $leiData = $response->json();
+            \Log::info('Attempting to save contact', [
+                'legal_entity_name' => $contact->legal_entity_name,
+                'registration_id' => $contact->registration_id,
+                'email' => $contact->email,
+                'selected_plan' => $contact->selected_plan,
+                'amount' => $contact->amount
+            ]);
             
-            // Check if LEI status allows renewal
-            $status = $leiData['data']['attributes']['registration']['status'] ?? null;
-            if ($status !== 'ISSUED' && $status !== 'LAPSED') {
-                return redirect()->back()->with('error', 'This LEI is not eligible for renewal');
-            }
+            $contact->save();
             
-            // Store renewal request in database
-            // This would be implemented based on your application's data model
+            \Log::info('Contact saved successfully with ID: ' . $contact->id);
             
-            // Redirect to payment page with the renewal details
+            // Redirect to payment page
             return redirect()->route('payment.show', [
-                'type' => 'renewal',
-                'lei' => $lei,
-                'period' => $period
-            ])->with('success', 'LEI verification successful');
+                'id' => $contact->id
+            ]);
             
         } catch (\Exception $e) {
-            Log::error('LEI renewal error: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'An error occurred during the renewal process');
+            \Log::error('LEI renewal error details: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return redirect()->back()->with('error', 'An error occurred during the renewal process: ' . $e->getMessage());
         }
     }
     
@@ -200,38 +244,61 @@ class GleifController extends Controller
             }
             
             // Verify LEI exists and is eligible for transfer
-            $response = Http::get($this->apiUrl . '/lei-records/' . $lei);
-            
-            if ($response->status() === 404) {
-                return redirect()->back()->with('error', 'LEI not found');
+            try {
+                $response = Http::get($this->apiUrl . '/lei-records/' . $lei);
+                
+                if ($response->status() === 404) {
+                    return redirect()->back()->with('error', 'LEI not found');
+                }
+                
+                if (!$response->successful()) {
+                    Log::error('GLEIF API Error: ' . $response->body());
+                    return redirect()->back()->with('error', 'Error verifying LEI with GLEIF');
+                }
+                
+                $leiData = $response->json();
+                
+                // Check if LEI status allows transfer
+                $status = $leiData['data']['attributes']['registration']['status'] ?? null;
+                if ($status !== 'ISSUED') {
+                    return redirect()->back()->with('error', 'This LEI is not eligible for transfer');
+                }
+                
+                // Store transfer request in database
+                $contact = new \App\Models\Contact();
+                $contact->type = 'transfer';
+                $contact->registration_id = $lei;
+                $contact->email = $email;
+                $contact->legal_entity_name = $leiData['data']['attributes']['entity']['legalName']['name'] ?? 'Unknown';
+                $contact->save();
+                
+                // Redirect to confirmation page
+                return redirect()->route('transfer.confirmation')->with([
+                    'success' => 'Transfer request submitted successfully',
+                    'lei' => $lei,
+                    'company' => $contact->legal_entity_name
+                ]);
+            } catch (\Exception $apiException) {
+                Log::error('GLEIF API communication error: ' . $apiException->getMessage());
+                
+                // Create a contact entry even if API verification fails
+                $contact = new \App\Models\Contact();
+                $contact->type = 'transfer';
+                $contact->registration_id = $lei;
+                $contact->email = $email;
+                $contact->legal_entity_name = 'LEI Transfer Request';
+                $contact->save();
+                
+                // Still redirect to confirmation
+                return redirect()->route('transfer.confirmation')->with([
+                    'success' => 'Transfer request submitted successfully',
+                    'lei' => $lei
+                ]);
             }
-            
-            if (!$response->successful()) {
-                Log::error('GLEIF API Error: ' . $response->body());
-                return redirect()->back()->with('error', 'Error verifying LEI with GLEIF');
-            }
-            
-            $leiData = $response->json();
-            
-            // Check if LEI status allows transfer
-            $status = $leiData['data']['attributes']['registration']['status'] ?? null;
-            if ($status !== 'ISSUED') {
-                return redirect()->back()->with('error', 'This LEI is not eligible for transfer');
-            }
-            
-            // Store transfer request in database
-            // This would be implemented based on your application's data model
-            
-            // Redirect to confirmation page
-            return redirect()->route('transfer.confirmation')->with([
-                'success' => 'Transfer request submitted successfully',
-                'lei' => $lei,
-                'company' => $leiData['data']['attributes']['entity']['legalName']['name'] ?? 'Unknown'
-            ]);
-            
+                
         } catch (\Exception $e) {
             Log::error('LEI transfer error: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'An error occurred during the transfer process');
+            return redirect()->back()->with('error', 'An error occurred during the transfer process: ' . $e->getMessage());
         }
     }
     
@@ -266,6 +333,7 @@ class GleifController extends Controller
             $contact->type = 'registration';
             $contact->full_name = $request->input('full_name');
             $contact->legal_entity_name = $request->input('legal_entity_name');
+            $contact->registration_id = $request->input('registration_id');
             $contact->country = $request->input('country');
             $contact->email = $request->input('email');
             $contact->phone = $request->input('phone');

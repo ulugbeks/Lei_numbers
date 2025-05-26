@@ -38,8 +38,8 @@ class OrderController extends Controller
             // === создаём PaymentIntent ===
             $stripe = new StripeClient(config('services.stripe.secret'));
             $intent = $stripe->paymentIntents->create([
-                'amount'   => $order->total_price * 100,     // в центах
-                'currency' => 'usd',
+                'amount'   => $order->total_price * 100, 
+                'currency' => 'gbp',
                 'metadata' => ['order_id' => $order->id],
             ]);
 
@@ -62,8 +62,8 @@ class OrderController extends Controller
     {
         $prices = [
             '1-year' => 75,
-            '3-years' => 165,
-            '5-years' => 250,
+            '3-years' => 195,
+            '5-years' => 275,
         ];
         return $prices[$plan] ?? 75;
     }

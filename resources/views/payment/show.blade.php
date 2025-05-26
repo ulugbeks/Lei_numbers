@@ -26,15 +26,15 @@
                     <div class="benefits mb-4">
                         <div class="d-flex align-items-center mb-3">
                             <i class="fas fa-check text-success me-3"></i>
-                            <span>We'll begin processing your LEI application once payment is received</span>
+                            <span>We'll begin processing your LEI application once payment is received.</span>
                         </div>
                         <div class="d-flex align-items-center mb-3">
                             <i class="fas fa-check text-success me-3"></i>
-                            <span>95% of LEI numbers are issued in less than 24 hours</span>
+                            <span>95% of LEI numbers are issued in less than 24 hours.</span>
                         </div>
                         <div class="d-flex align-items-center mb-3">
                             <i class="fas fa-check text-success me-3"></i>
-                            <span>Your LEI number will be sent to {{ $contact->email }}</span>
+                            <span>Your LEI number will be sent to {{ $contact->email }}.</span>
                         </div>
                     </div>
 
@@ -52,7 +52,7 @@
                             <div class="plan-option card h-100 {{ $contact->selected_plan === '3-years' ? 'active' : '' }}" id="plan-3-years">
                                 <div class="card-body text-center">
                                     <h5 class="card-title">3 years</h5>
-                                    <h3 class="card-price">£165</h3>
+                                    <h3 class="card-price">£195</h3>
                                     <span class="text-primary">Save 27%</span>
                                 </div>
                             </div>
@@ -61,7 +61,7 @@
                             <div class="plan-option card h-100 {{ $contact->selected_plan === '5-years' ? 'active' : '' }}" id="plan-5-years">
                                 <div class="card-body text-center">
                                     <h5 class="card-title">5 years</h5>
-                                    <h3 class="card-price">£250</h3>
+                                    <h3 class="card-price">£275</h3>
                                     <span class="text-primary">Save 33%</span>
                                 </div>
                             </div>
@@ -94,7 +94,7 @@
                         </div>
 
                         <!-- Standard service -->
-                        <div class="service-option card active" id="service-standard">
+                        <div class="service-option card" id="service-standard">
                             <div class="card-body">
                                 <h6 class="mb-3">Standard service</h6>
                                 <div class="fw-bold">Free</div>
@@ -117,12 +117,12 @@
                         </div>
                         <div class="d-flex justify-content-between mb-2">
                             <span>Service fee</span>
-                            <span id="service-amount">£0.00</span>
+                            <span id="service-amount">£21.00</span>
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between fw-bold">
                             <span>Total</span>
-                            <span id="total-amount">£{{ $amount }}</span>
+                            <span id="total-amount">£{{ $amount + 21 }}</span>
                         </div>
                     </div>
 
@@ -142,12 +142,10 @@
                         <form id="payment-form">
                             <div class="payment-method-selector mb-3">
                                 <div class="btn-group w-100" role="group">
-                                    <button type="button" class="btn btn-outline-primary active" data-method="card">
+                                    <!-- <button type="button" class="btn btn-outline-primary active" data-method="card">
                                         <i class="far fa-credit-card"></i> Card
-                                    </button>
-                                    <!-- <button type="button" class="btn btn-outline-primary" data-method="paypal">
-                                        <i class="fab fa-paypal"></i> PayPal
                                     </button> -->
+                                    <img src="{{ asset('assets/img/payment-icons-lei.png') }}" alt="Payment Methods" height="60">
                                 </div>
                             </div>
                             
@@ -166,7 +164,7 @@
                             </div>
 
                             <button id="submit-payment" class="btn btn-primary w-100 mt-3">
-                                Pay <span id="button-amount">£ {{ $amount }}</span>
+                                Pay <span id="button-amount">£{{ $amount + 21 }}</span>
                             </button>
                         </form>
                     </div>
@@ -193,8 +191,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let state = {
         plan: '{{ $contact->selected_plan }}',
         planAmount: {{ $amount }},
-        serviceType: 'standard',
-        serviceAmount: 0,
+        serviceType: 'complete',
+        serviceAmount: 21,
         paymentMethod: 'card'
     };
     
@@ -242,11 +240,19 @@ document.addEventListener('DOMContentLoaded', function() {
             display: flex;
             align-items: center;
             justify-content: center;
-            visibility: hidden;
         }
         
-        .plan-option.active .plan-checkbox {
+        .plan-option:not(.active) .plan-checkbox {
+            background-color: #f0f0f0;
+            border: 2px solid #ccc;
+        }
+        
+        .plan-option.active .plan-checkbox i {
             visibility: visible;
+        }
+        
+        .plan-option:not(.active) .plan-checkbox i {
+            visibility: hidden;
         }
         
         .plan-checkbox i {
@@ -256,6 +262,20 @@ document.addEventListener('DOMContentLoaded', function() {
         .service-option {
             position: relative;
             cursor: pointer;
+        }
+        
+        .service-inactive-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            border: 2px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     `;
     document.head.appendChild(style);
@@ -287,9 +307,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (planId === '1-year') {
                 state.planAmount = 75;
             } else if (planId === '3-years') {
-                state.planAmount = 165;
+                state.planAmount = 195;
             } else if (planId === '5-years') {
-                state.planAmount = 250;
+                state.planAmount = 275;
             }
             
             // Update all amounts
@@ -297,6 +317,74 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Initialize service options
+    const completeService = document.getElementById('service-complete');
+    const standardService = document.getElementById('service-standard');
+    
+    // Function to update service selection UI
+    function updateServiceSelection(selectedService) {
+        // Remove active class from all services
+        [completeService, standardService].forEach(service => {
+            service.classList.remove('active');
+            
+            // Remove blue checkbox if it exists
+            const existingCheckbox = service.querySelector('.service-checkbox');
+            if (existingCheckbox) {
+                existingCheckbox.remove();
+            }
+            
+            // Add inactive indicator if it doesn't exist
+            if (!service.querySelector('.service-inactive-indicator')) {
+                const inactiveIndicator = document.createElement('div');
+                inactiveIndicator.className = 'service-inactive-indicator';
+                service.style.position = 'relative';
+                service.appendChild(inactiveIndicator);
+            }
+        });
+        
+        // Add active class to selected service
+        selectedService.classList.add('active');
+        
+        // Remove inactive indicator if it exists
+        const inactiveIndicator = selectedService.querySelector('.service-inactive-indicator');
+        if (inactiveIndicator) {
+            inactiveIndicator.remove();
+        }
+        
+        // Add blue checkbox to selected service
+        const checkboxDiv = document.createElement('div');
+        checkboxDiv.className = 'service-checkbox';
+        checkboxDiv.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+        checkboxDiv.style.position = 'absolute';
+        checkboxDiv.style.top = '10px';
+        checkboxDiv.style.right = '10px';
+        checkboxDiv.style.width = '36px';
+        checkboxDiv.style.height = '36px';
+        checkboxDiv.style.backgroundColor = '#0066ff';
+        checkboxDiv.style.borderRadius = '50%';
+        checkboxDiv.style.display = 'flex';
+        checkboxDiv.style.alignItems = 'center';
+        checkboxDiv.style.justifyContent = 'center';
+        selectedService.style.position = 'relative';
+        selectedService.appendChild(checkboxDiv);
+        
+        // Update state
+        state.serviceType = selectedService.id === 'service-complete' ? 'complete' : 'standard';
+        state.serviceAmount = selectedService.id === 'service-complete' ? 21 : 0;
+        
+        // Update displayed amounts
+        updateAmounts();
+    }
+    
+    // Add click events to service options
+    completeService.addEventListener('click', function() {
+        updateServiceSelection(this);
+    });
+    
+    standardService.addEventListener('click', function() {
+        updateServiceSelection(this);
+    });
+    
     // Create card element
     const cardElement = elements.create('card', {
         style: {
@@ -329,27 +417,6 @@ document.addEventListener('DOMContentLoaded', function() {
             displayError.classList.add('d-none');
         }
     });
-
-    // Service option selection
-    document.querySelectorAll('.service-option').forEach(option => {
-        option.addEventListener('click', function() {
-            // Remove active class from all options
-            document.querySelectorAll('.service-option').forEach(o => {
-                o.classList.remove('active');
-            });
-            
-            // Add active class to clicked option
-            this.classList.add('active');
-            
-            // Update state
-            const serviceType = this.id.replace('service-', '');
-            state.serviceType = serviceType;
-            state.serviceAmount = serviceType === 'complete' ? 21 : 0;
-            
-            // Update amounts
-            updateAmounts();
-        });
-    });
     
     // Payment method selection
     document.querySelectorAll('.payment-method-selector button').forEach(button => {
@@ -375,6 +442,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Initial setup - ВАЖНО: всегда выбираем Complete service при загрузке страницы
+    updateServiceSelection(completeService);
 
     // Handle form submission
     const form = document.getElementById('payment-form');

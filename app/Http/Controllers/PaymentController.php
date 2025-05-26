@@ -60,8 +60,8 @@ class PaymentController extends Controller
     {
         $planPrices = [
             '1-year' => 75.00,
-            '3-years' => 165.00,
-            '5-years' => 250.00
+            '3-years' => 195.00,
+            '5-years' => 275.00
         ];
         
         return $planPrices[$contact->selected_plan] ?? 75.00;

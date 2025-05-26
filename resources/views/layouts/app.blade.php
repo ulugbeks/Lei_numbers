@@ -68,6 +68,7 @@
 <script src="{{ asset('assets/js/gleif-validation-helper.js') }}?v={{ time() }}"></script>
 <script src="{{ asset('assets/js/renew-tab-fix.js') }}?v={{ time() }}"></script>
 <script src="{{ asset('assets/js/transfer-tab-fix.js') }}?v={{ time() }}"></script>
+<script src="{{ asset('assets/js/plan-selection.js') }}?v={{ time() }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://js.stripe.com/v3/"></script>
 

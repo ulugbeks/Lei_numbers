@@ -141,10 +141,10 @@
                                             <h4 class="plan-title">1 year</h4>
                                         </div>
                                         <div class="plan-price">
-                                            <span class="currency">€</span>75
+                                            <span class="currency">£</span>75
                                             <span class="period">/ year</span>
                                         </div>
-                                        <div class="plan-total">Total €75</div>
+                                        <div class="plan-total">Total £75</div>
                                         <button class="plan-select-btn">Select Plan</button>
                                     </div>
                                     
@@ -154,10 +154,10 @@
                                             <h4 class="plan-title">3 years</h4>
                                         </div>
                                         <div class="plan-price">
-                                            <span class="currency">€</span>55
+                                            <span class="currency">£</span>65
                                             <span class="period">/ year</span>
                                         </div>
-                                        <div class="plan-total">Total €165</div>
+                                        <div class="plan-total">Total £195</div>
                                         <button class="plan-select-btn">Select Plan</button>
                                     </div>
                                     
@@ -166,10 +166,10 @@
                                             <h4 class="plan-title">5 years</h4>
                                         </div>
                                         <div class="plan-price">
-                                            <span class="currency">€</span>50
+                                            <span class="currency">£</span>55
                                             <span class="period">/ year</span>
                                         </div>
-                                        <div class="plan-total">Total €250</div>
+                                        <div class="plan-total">Total £275</div>
                                         <button class="plan-select-btn">Select Plan</button>
                                     </div>
                                 </div>
@@ -316,6 +316,26 @@
                                                     <div class="input-with-icon">
                                                         <i class="fas fa-map-pin"></i>
                                                         <input type="text" id="zip_code" name="zip_code" class="form-control" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <p class="upload-instruction">To verify announcement, please upload a document listing the legal entity's authorized representatives (e.g., board meeting minutes, articles of association):</p>
+                                                    <div class="upload-area">
+                                                        <div class="upload-icon"><i class="fa fa-upload"></i></div>
+                                                        <div class="upload-text">Browse files or drag and drop</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <p class="upload-instruction">To verify announcement, please upload a document listing the legal entity's authorized representatives (e.g., board meeting minutes, articles of association):</p>
+                                                    <div class="upload-area">
+                                                        <div class="upload-icon"><i class="fa fa-upload"></i></div>
+                                                        <div class="upload-text">Browse files or drag and drop</div>
                                                     </div>
                                                 </div>
                                             </div>

@@ -21,7 +21,8 @@ class Contact extends Model
         'same_address',
         'private_controlled',
         'payment_status',
-        'document_path'
+        'document_path',
+        'type'
     ];
 
     protected $casts = [
