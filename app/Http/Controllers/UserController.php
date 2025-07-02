@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Contact;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -50,9 +51,44 @@ class UserController extends Controller
 
         // Validate the request
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'phone' => 'nullable|string|max:20',
+            // Account info
+            'username' => [
+                'required', 
+                'string', 
+                'max:255', 
+                Rule::unique('users')->ignore($user->id),
+                'regex:/^[a-zA-Z0-9_]+$/'
+            ],
+            'email' => [
+                'required', 
+                'string', 
+                'email', 
+                'max:255', 
+                Rule::unique('users')->ignore($user->id)
+            ],
+            
+            // Personal info
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'suffix' => 'nullable|string|max:50',
+            
+            // Company & Contact
+            'company_name' => 'required|string|max:255',
+            'phone_country_code' => 'nullable|string|max:10',
+            'phone' => 'required|string|max:50',
+            
+            // Address
+            'address_line_1' => 'required|string|max:255',
+            'address_line_2' => 'nullable|string|max:255',
+            'city' => 'required|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'country' => 'required|string|max:2',
+            'postal_code' => 'required|string|max:20',
+        ], [
+            'username.unique' => 'This username is already taken.',
+            'username.regex' => 'Username can only contain letters, numbers, and underscores.',
+            'email.unique' => 'This email address is already in use.',
         ]);
 
         if ($validator->fails()) {
@@ -64,13 +100,36 @@ class UserController extends Controller
 
         try {
             // Update user information
-            $user->name = $request->input('name');
+            $user->username = $request->input('username');
             $user->email = $request->input('email');
             
-            // Add phone to users table if column exists
-            if (in_array('phone', $user->getFillable())) {
-                $user->phone = $request->input('phone');
-            }
+            // Update personal info
+            $user->first_name = $request->input('first_name');
+            $user->middle_name = $request->input('middle_name');
+            $user->last_name = $request->input('last_name');
+            $user->suffix = $request->input('suffix');
+            
+            // Update the full name
+            $full_name = trim(implode(' ', array_filter([
+                $user->first_name,
+                $user->middle_name,
+                $user->last_name,
+                $user->suffix
+            ])));
+            $user->name = $full_name;
+            
+            // Update company & contact
+            $user->company_name = $request->input('company_name');
+            $user->phone_country_code = $request->input('phone_country_code');
+            $user->phone = $request->input('phone');
+            
+            // Update address
+            $user->address_line_1 = $request->input('address_line_1');
+            $user->address_line_2 = $request->input('address_line_2');
+            $user->city = $request->input('city');
+            $user->state = $request->input('state');
+            $user->country = $request->input('country');
+            $user->postal_code = $request->input('postal_code');
             
             $user->save();
 

@@ -56,7 +56,8 @@
                             <div class="profile-avatar mb-3">
                                 <i class="fas fa-user-circle" style="font-size: 100px; color: #ccc;"></i>
                             </div>
-                            <h4>{{ $user->name }}</h4>
+                            <h4>{{ $user->full_name }}</h4>
+                            <!-- <p class="text-muted">@{{ $user->username }}</p> -->
                             <p class="text-muted">{{ $user->email }}</p>
                         </div>
                         
@@ -68,7 +69,7 @@
                             </li>
                             <li>
                                 <a href="#lei-history" class="tab-link">
-                                    <i class="fas fa-history"></i> LEI History
+                                    <i class="fas fa-history"></i> LEI Orders
                                 </a>
                             </li>
                             <li>
@@ -101,25 +102,143 @@
                                     <form action="{{ route('user.profile.update') }}" method="POST">
                                         @csrf
                                         
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-grp">
-                                                    <label for="name">Full Name</label>
-                                                    <input type="text" id="name" name="name" value="{{ $user->name }}" required>
+                                        <!-- Personal Information -->
+                                        <div class="form-section mb-4">
+                                            <h5 class="section-title">Personal Information</h5>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-grp">
+                                                        <label for="username">Username</label>
+                                                        <input type="text" id="username" name="username" value="{{ $user->username }}" required>
+                                                        @error('username')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-6">
+                                                    <div class="form-grp">
+                                                        <label for="email">Email Address</label>
+                                                        <input type="email" id="email" name="email" value="{{ $user->email }}" required>
+                                                        @error('email')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-3">
+                                                    <div class="form-grp">
+                                                        <label for="first_name">First Name</label>
+                                                        <input type="text" id="first_name" name="first_name" value="{{ $user->first_name }}" required>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-2">
+                                                    <div class="form-grp">
+                                                        <label for="middle_name">Middle Name</label>
+                                                        <input type="text" id="middle_name" name="middle_name" value="{{ $user->middle_name }}">
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-5">
+                                                    <div class="form-grp">
+                                                        <label for="last_name">Last Name</label>
+                                                        <input type="text" id="last_name" name="last_name" value="{{ $user->last_name }}" required>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-2">
+                                                    <div class="form-grp">
+                                                        <label for="suffix">Suffix</label>
+                                                        <input type="text" id="suffix" name="suffix" value="{{ $user->suffix }}">
+                                                    </div>
                                                 </div>
                                             </div>
-                                            
-                                            <div class="col-md-6">
-                                                <div class="form-grp">
-                                                    <label for="email">Email Address</label>
-                                                    <input type="email" id="email" name="email" value="{{ $user->email }}" required>
+                                        </div>
+                                        
+                                        <!-- Company & Contact Information -->
+                                        <div class="form-section mb-4">
+                                            <h5 class="section-title">Company & Contact Information</h5>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-grp">
+                                                        <label for="company_name">Company Name</label>
+                                                        <input type="text" id="company_name" name="company_name" value="{{ $user->company_name }}" required>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-3">
+                                                    <div class="form-grp">
+                                                        <label for="phone_country_code">Country Code</label>
+                                                        <select name="phone_country_code" id="phone_country_code" class="form-control">
+                                                            <option value="">Select</option>
+                                                            <option value="+1" {{ $user->phone_country_code == '+1' ? 'selected' : '' }}>+1 (US)</option>
+                                                            <option value="+44" {{ $user->phone_country_code == '+44' ? 'selected' : '' }}>+44 (UK)</option>
+                                                            <option value="+49" {{ $user->phone_country_code == '+49' ? 'selected' : '' }}>+49 (DE)</option>
+                                                            <option value="+33" {{ $user->phone_country_code == '+33' ? 'selected' : '' }}>+33 (FR)</option>
+                                                            <option value="+371" {{ $user->phone_country_code == '+371' ? 'selected' : '' }}>+371 (LV)</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-9">
+                                                    <div class="form-grp">
+                                                        <label for="phone">Phone Number</label>
+                                                        <input type="tel" id="phone" name="phone" value="{{ $user->phone }}" required>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            
-                                            <div class="col-md-6">
-                                                <div class="form-grp">
-                                                    <label for="phone">Phone Number</label>
-                                                    <input type="tel" id="phone" name="phone" value="{{ $user->phone ?? '' }}">
+                                        </div>
+                                        
+                                        <!-- Address Information -->
+                                        <div class="form-section mb-4">
+                                            <h5 class="section-title">Address Information</h5>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-grp">
+                                                        <label for="address_line_1">Address Line 1</label>
+                                                        <input type="text" id="address_line_1" name="address_line_1" value="{{ $user->address_line_1 }}" required>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-12">
+                                                    <div class="form-grp">
+                                                        <label for="address_line_2">Address Line 2</label>
+                                                        <input type="text" id="address_line_2" name="address_line_2" value="{{ $user->address_line_2 }}">
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-6">
+                                                    <div class="form-grp">
+                                                        <label for="city">City</label>
+                                                        <input type="text" id="city" name="city" value="{{ $user->city }}" required>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-6">
+                                                    <div class="form-grp">
+                                                        <label for="state">State</label>
+                                                        <input type="text" id="state" name="state" value="{{ $user->state }}">
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-6">
+                                                    <div class="form-grp">
+                                                        <label for="country">Country</label>
+                                                        <select name="country" id="country" class="form-control select2" required>
+                                                            <option value="">Select Country</option>
+                                                            @foreach (config('countries') as $code => $name)
+                                                                <option value="{{ $code }}" {{ $user->country == $code ? 'selected' : '' }}>{{ $name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-6">
+                                                    <div class="form-grp">
+                                                        <label for="postal_code">Postal Code</label>
+                                                        <input type="text" id="postal_code" name="postal_code" value="{{ $user->postal_code }}" required>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -301,6 +420,19 @@
     margin: 0;
 }
 
+.form-section {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #333;
+}
+
 .form-grp {
     margin-bottom: 20px;
 }
@@ -311,7 +443,8 @@
     font-weight: 600;
 }
 
-.form-grp input {
+.form-grp input,
+.form-grp select {
     width: 100%;
     padding: 10px 15px;
     border: 1px solid #ddd;
@@ -361,6 +494,29 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Show first tab
     document.querySelector('.tab-pane').classList.add('active');
+    
+    // Check if we should show a specific tab
+    const urlParams = new URLSearchParams(window.location.search);
+    const tab = urlParams.get('tab') || sessionStorage.getItem('profileTab');
+    
+    if (tab) {
+        const tabElement = document.getElementById(tab);
+        if (tabElement) {
+            // Remove active from all tabs
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            document.querySelectorAll('.profile-menu li').forEach(li => li.classList.remove('active'));
+            
+            // Activate the specific tab
+            tabElement.classList.add('active');
+            const menuLink = document.querySelector(`.profile-menu a[href="#${tab}"]`);
+            if (menuLink) {
+                menuLink.closest('li').classList.add('active');
+            }
+        }
+        
+        // Clear the session storage
+        sessionStorage.removeItem('profileTab');
+    }
 });
 </script>
 

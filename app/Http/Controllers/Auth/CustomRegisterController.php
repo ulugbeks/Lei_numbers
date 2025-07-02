@@ -102,18 +102,51 @@ class CustomRegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            // Account Information
+            'username' => ['required', 'string', 'max:255', 'unique:users', 'regex:/^[a-zA-Z0-9_]+$/'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            
+            // User Details
+            'first_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['nullable', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'suffix' => ['nullable', 'string', 'max:50'],
+            'company_name' => ['required', 'string', 'max:255'],
+            'phone_country_code' => ['nullable', 'string', 'max:10'],
+            'phone' => ['required', 'string', 'max:50'],
+            
+            // Address
+            'address_line_1' => ['required', 'string', 'max:255'],
+            'address_line_2' => ['nullable', 'string', 'max:255'],
+            'country' => ['required', 'string', 'max:2'],
+            'city' => ['required', 'string', 'max:255'],
+            'state' => ['nullable', 'string', 'max:255'],
+            'postal_code' => ['required', 'string', 'max:20'],
+            
+            // Terms
             'terms' => ['required', 'accepted'],
+            'privacy' => ['required', 'accepted'],
         ], [
-            'name.required' => 'Please enter your full name.',
+            // Custom error messages
+            'username.required' => 'Please enter a username.',
+            'username.unique' => 'This username is already taken.',
+            'username.regex' => 'Username can only contain letters, numbers, and underscores.',
             'email.required' => 'Please enter your email address.',
             'email.unique' => 'This email address is already registered.',
             'password.required' => 'Please enter a password.',
             'password.min' => 'Password must be at least 8 characters long.',
             'password.confirmed' => 'Password confirmation does not match.',
+            'first_name.required' => 'Please enter your first name.',
+            'last_name.required' => 'Please enter your last name.',
+            'company_name.required' => 'Please enter your company name.',
+            'phone.required' => 'Please enter your phone number.',
+            'address_line_1.required' => 'Please enter your address.',
+            'country.required' => 'Please select your country.',
+            'city.required' => 'Please enter your city.',
+            'postal_code.required' => 'Please enter your postal code.',
             'terms.accepted' => 'You must accept the terms and conditions.',
+            'privacy.accepted' => 'You must accept the privacy policy.',
         ]);
     }
 
@@ -125,10 +158,36 @@ class CustomRegisterController extends Controller
      */
     protected function create(array $data)
     {
+        // Create full name from first, middle, and last name
+        $full_name = trim(implode(' ', array_filter([
+            $data['first_name'] ?? '',
+            $data['middle_name'] ?? '',
+            $data['last_name'] ?? '',
+            $data['suffix'] ?? ''
+        ])));
+
         return User::create([
-            'name' => $data['name'],
+            'name' => $full_name,
+            'username' => $data['username'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'first_name' => $data['first_name'],
+            'middle_name' => $data['middle_name'] ?? null,
+            'last_name' => $data['last_name'],
+            'suffix' => $data['suffix'] ?? null,
+            'company_name' => $data['company_name'],
+            'phone_country_code' => $data['phone_country_code'] ?? null,
+            'phone' => $data['phone'],
+            'address_line_1' => $data['address_line_1'],
+            'address_line_2' => $data['address_line_2'] ?? null,
+            'country' => $data['country'],
+            'city' => $data['city'],
+            'state' => $data['state'] ?? null,
+            'postal_code' => $data['postal_code'],
+            'terms_accepted' => true,
+            'privacy_accepted' => true,
+            'terms_accepted_at' => now(),
+            'privacy_accepted_at' => now(),
             'email_verified_at' => now(), // Auto-verify email (remove this if you want email verification)
         ]);
     }
@@ -192,6 +251,28 @@ class CustomRegisterController extends Controller
         return response()->json([
             'available' => !$exists,
             'message' => $exists ? 'This email is already registered.' : 'Email is available.'
+        ]);
+    }
+
+    /**
+     * Check if username is available (for AJAX validation)
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function checkUsername(Request $request)
+    {
+        $username = $request->input('username');
+        
+        if (!$username) {
+            return response()->json(['available' => false]);
+        }
+
+        $exists = User::where('username', $username)->exists();
+
+        return response()->json([
+            'available' => !$exists,
+            'message' => $exists ? 'This username is already taken.' : 'Username is available.'
         ]);
     }
 

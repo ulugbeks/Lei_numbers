@@ -184,3 +184,7 @@ Route::middleware(['auth'])->prefix('user')->group(function () {
     Route::get('/lei/{id}/renew', [App\Http\Controllers\UserController::class, 'renewLei'])->name('user.lei.renew');
     Route::get('/lei/{id}/transfer', [App\Http\Controllers\UserController::class, 'transferLei'])->name('user.lei.transfer');
 });
+
+// AJAX validation routes for registration
+Route::post('/check-email', [App\Http\Controllers\Auth\CustomRegisterController::class, 'checkEmail'])->name('check.email');
+Route::post('/check-username', [App\Http\Controllers\Auth\CustomRegisterController::class, 'checkUsername'])->name('check.username');
