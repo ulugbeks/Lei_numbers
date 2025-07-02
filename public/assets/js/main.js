@@ -1796,3 +1796,125 @@ document.querySelectorAll('.plan-option').forEach(option => {
         }
     });
 });
+
+
+
+// Add this JavaScript to your main.js or at the bottom of your index.blade.php file
+
+document.addEventListener('DOMContentLoaded', function() {
+    // File upload functionality
+    function initializeFileUpload(uploadAreaId, inputId) {
+        const uploadArea = document.getElementById(uploadAreaId);
+        const fileInput = document.getElementById(inputId);
+        const uploadContent = uploadArea.querySelector('.upload-content');
+        const uploadIcon = uploadArea.querySelector('.upload-icon');
+        const uploadText = uploadArea.querySelector('.upload-text');
+        const fileInfo = uploadArea.querySelector('.file-info');
+        const fileName = uploadArea.querySelector('.file-name');
+        const removeBtn = uploadArea.querySelector('.remove-file');
+
+        // Click to upload
+        uploadArea.addEventListener('click', function(e) {
+            if (!e.target.classList.contains('remove-file')) {
+                fileInput.click();
+            }
+        });
+
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.add('drag-over');
+        });
+
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.remove('drag-over');
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.remove('drag-over');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                handleFileSelect(files[0]);
+            }
+        });
+
+        // File selection
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+
+        // Remove file
+        removeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            fileInput.value = '';
+            resetUploadArea();
+        });
+
+        function handleFileSelect(file) {
+            // Validate file size (max 10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size must be less than 10MB');
+                return;
+            }
+
+            // Show file info
+            fileName.textContent = file.name;
+            uploadIcon.style.display = 'none';
+            uploadText.style.display = 'none';
+            fileInfo.style.display = 'flex';
+            uploadArea.classList.add('has-file');
+        }
+
+        function resetUploadArea() {
+            uploadIcon.style.display = 'block';
+            uploadText.style.display = 'block';
+            fileInfo.style.display = 'none';
+            uploadArea.classList.remove('has-file');
+        }
+    }
+
+    // Initialize file uploads
+    if (document.getElementById('company-excerpt-upload')) {
+        initializeFileUpload('company-excerpt-upload', 'company_excerpt');
+    }
+    if (document.getElementById('user-id-upload')) {
+        initializeFileUpload('user-id-upload', 'user_id_document');
+    }
+
+    // Update form submission to handle files
+    const registerForm = document.getElementById('register-form');
+    if (registerForm) {
+        // Make sure the form has the correct enctype
+        registerForm.setAttribute('enctype', 'multipart/form-data');
+    }
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Header dropdown functionality
+    const dropdownToggle = document.querySelector('.header-profile .dropdown-toggle');
+    const headerProfile = document.querySelector('.header-profile');
+    
+    if (dropdownToggle) {
+        dropdownToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            headerProfile.classList.toggle('show');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!headerProfile.contains(e.target)) {
+                headerProfile.classList.remove('show');
+            }
+        });
+    }
+});

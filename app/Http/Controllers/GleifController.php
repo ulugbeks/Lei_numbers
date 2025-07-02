@@ -9,6 +9,7 @@ use App\Mail\UserRegistrationConfirmation;
 use App\Mail\AdminRegistrationNotification;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Contact;
+use Illuminate\Support\Facades\Auth;
 
 class GleifController extends Controller
 {
@@ -121,6 +122,106 @@ class GleifController extends Controller
         }
     }
     
+    /**
+     * Process new LEI registration
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function processRegistration(Request $request)
+    {
+        try {
+            // Log the incoming request
+            \Log::info('Registration form received', $request->all());
+            
+            // Basic validation
+            $validated = $request->validate([
+                'country' => 'required|string',
+                'full_name' => 'required|string|max:255',
+                'legal_entity_name' => 'required|string|max:255',
+                'email' => 'required|email',
+                'phone' => 'required',
+                'address' => 'required',
+                'city' => 'required',
+                'zip_code' => 'required',
+                'terms' => 'required',
+                'selected_plan' => 'required'
+            ]);
+            
+            // Create a new contact record
+            $contact = new \App\Models\Contact();
+            $contact->type = 'registration';
+            $contact->full_name = $request->input('full_name');
+            $contact->legal_entity_name = $request->input('legal_entity_name');
+            $contact->registration_id = $request->input('registration_id');
+            $contact->country = $request->input('country');
+            $contact->email = $request->input('email');
+            $contact->phone = $request->input('phone');
+            $contact->address = $request->input('address');
+            $contact->city = $request->input('city');
+            $contact->zip_code = $request->input('zip_code');
+            $contact->selected_plan = $request->input('selected_plan');
+            $contact->same_address = $request->input('same_address', true);
+            $contact->private_controlled = $request->input('private_controlled', false);
+            $contact->payment_status = 'pending';
+            
+            // Set plan amount based on selected plan
+            $planPrices = [
+                '1-year' => 75.00,
+                '3-years' => 195.00,
+                '5-years' => 275.00
+            ];
+            $contact->amount = $planPrices[$contact->selected_plan] ?? 75.00;
+            
+            // Associate with logged-in user if exists
+            if (Auth::check()) {
+                $contact->user_id = Auth::id();
+            }
+            
+            $contact->save();
+
+            // Send confirmation email to user
+            try {
+                Mail::to($contact->email)->send(new UserRegistrationConfirmation($contact));
+            } catch (\Exception $mailException) {
+                \Log::error('Failed to send user confirmation email: ' . $mailException->getMessage());
+            }
+            
+            // Send notification to admin
+            try {
+                Mail::to(config('mail.admin_email', 'info@lei-register.co.uk'))
+                    ->send(new AdminRegistrationNotification($contact));
+            } catch (\Exception $mailException) {
+                \Log::error('Failed to send admin notification email: ' . $mailException->getMessage());
+            }
+            
+            // Get the ID for redirection
+            $contactId = $contact->id;
+            
+            // Log the redirect attempt
+            \Log::info('Redirecting to payment page', ['order_id' => $contactId]);
+
+            // If this is an AJAX/fetch request, return JSON
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success'  => true,
+                    'redirect' => route('payment.show', ['id' => $contactId]),
+                ]);
+            }
+
+           // Fallback: full-page redirect
+           return redirect()->route('payment.show', ['id' => $contactId]);
+            
+        } catch (\Exception $e) {
+            // Log the error
+            \Log::error('Registration error: ' . $e->getMessage());
+            
+            // Return with error
+            return redirect()->back()
+                    ->with('error', 'An error occurred: ' . $e->getMessage())
+                    ->withInput();
+        }
+    }
 
     /**
      * Process LEI renewal
@@ -150,8 +251,20 @@ class GleifController extends Controller
                 return redirect()->back()->with('error', 'Invalid LEI format');
             }
             
-            // Log the contact creation attempt
-            \Log::info('Creating Contact model for renewal');
+            // Check if this LEI belongs to the logged-in user (if authenticated)
+            if (Auth::check()) {
+                $existingLei = Contact::where('registration_id', $lei)
+                    ->where('user_id', Auth::id())
+                    ->first();
+                
+                if (!$existingLei) {
+                    // Check if LEI exists but belongs to another user
+                    $leiExists = Contact::where('registration_id', $lei)->exists();
+                    if ($leiExists) {
+                        return redirect()->back()->with('error', 'This LEI is not associated with your account.');
+                    }
+                }
+            }
             
             // Create a new contact for the renewal
             $contact = new \App\Models\Contact();
@@ -166,9 +279,9 @@ class GleifController extends Controller
             
             // Fill required fields with default values if necessary
             $contact->type = 'renewal';
-            $contact->legal_entity_name = $request->input('legal_entity_name', 'LEI Renewal');
+            $contact->legal_entity_name = $request->input('legal_entity_name', 'LEI Renewal - ' . $lei);
             $contact->registration_id = $lei;
-            $contact->email = $request->input('email', '');
+            $contact->email = $request->input('email', Auth::check() ? Auth::user()->email : '');
             $contact->phone = $request->input('phone', '');
             $contact->country = $request->input('country', '');
             $contact->address = $request->input('address', '');
@@ -178,6 +291,12 @@ class GleifController extends Controller
             $contact->payment_status = 'pending';
             $contact->same_address = true;
             $contact->private_controlled = false;
+            $contact->full_name = $request->input('full_name', Auth::check() ? Auth::user()->name : '');
+            
+            // Associate with logged-in user if exists
+            if (Auth::check()) {
+                $contact->user_id = Auth::id();
+            }
             
             // Set plan amount based on period
             switch ($period) {
@@ -199,7 +318,8 @@ class GleifController extends Controller
                 'registration_id' => $contact->registration_id,
                 'email' => $contact->email,
                 'selected_plan' => $contact->selected_plan,
-                'amount' => $contact->amount
+                'amount' => $contact->amount,
+                'user_id' => $contact->user_id
             ]);
             
             $contact->save();
@@ -243,6 +363,21 @@ class GleifController extends Controller
                 return redirect()->back()->with('error', 'Invalid LEI format');
             }
             
+            // Check if this LEI belongs to the logged-in user (if authenticated)
+            if (Auth::check()) {
+                $existingLei = Contact::where('registration_id', $lei)
+                    ->where('user_id', Auth::id())
+                    ->first();
+                
+                if (!$existingLei) {
+                    // Check if LEI exists but belongs to another user
+                    $leiExists = Contact::where('registration_id', $lei)->exists();
+                    if ($leiExists) {
+                        return redirect()->back()->with('error', 'This LEI is not associated with your account.');
+                    }
+                }
+            }
+            
             // Verify LEI exists and is eligible for transfer
             try {
                 $response = Http::get($this->apiUrl . '/lei-records/' . $lei);
@@ -270,6 +405,22 @@ class GleifController extends Controller
                 $contact->registration_id = $lei;
                 $contact->email = $email;
                 $contact->legal_entity_name = $leiData['data']['attributes']['entity']['legalName']['name'] ?? 'Unknown';
+                $contact->transfer_reason = $transferReason;
+                $contact->payment_status = 'pending';
+                $contact->full_name = Auth::check() ? Auth::user()->name : '';
+                $contact->country = '';
+                $contact->phone = '';
+                $contact->address = '';
+                $contact->city = '';
+                $contact->zip_code = '';
+                $contact->selected_plan = '1-year'; // Default plan for transfers
+                $contact->amount = 75.00; // Default amount for transfers
+                
+                // Associate with logged-in user if exists
+                if (Auth::check()) {
+                    $contact->user_id = Auth::id();
+                }
+                
                 $contact->save();
                 
                 // Redirect to confirmation page
@@ -287,6 +438,22 @@ class GleifController extends Controller
                 $contact->registration_id = $lei;
                 $contact->email = $email;
                 $contact->legal_entity_name = 'LEI Transfer Request';
+                $contact->transfer_reason = $transferReason;
+                $contact->payment_status = 'pending';
+                $contact->full_name = Auth::check() ? Auth::user()->name : '';
+                $contact->country = '';
+                $contact->phone = '';
+                $contact->address = '';
+                $contact->city = '';
+                $contact->zip_code = '';
+                $contact->selected_plan = '1-year';
+                $contact->amount = 75.00;
+                
+                // Associate with logged-in user if exists
+                if (Auth::check()) {
+                    $contact->user_id = Auth::id();
+                }
+                
                 $contact->save();
                 
                 // Still redirect to confirmation
@@ -299,82 +466,6 @@ class GleifController extends Controller
         } catch (\Exception $e) {
             Log::error('LEI transfer error: ' . $e->getMessage());
             return redirect()->back()->with('error', 'An error occurred during the transfer process: ' . $e->getMessage());
-        }
-    }
-    
-    /**
-     * Process new LEI registration
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function processRegistration(Request $request)
-    {
-        try {
-            // Log the incoming request
-            \Log::info('Registration form received', $request->all());
-            
-            // Basic validation
-            $validated = $request->validate([
-                'country' => 'required|string',
-                'full_name' => 'required|string|max:255',
-                'legal_entity_name' => 'required|string|max:255',
-                'email' => 'required|email',
-                'phone' => 'required',
-                'address' => 'required',
-                'city' => 'required',
-                'zip_code' => 'required',
-                'terms' => 'required',
-                'selected_plan' => 'required'
-            ]);
-            
-            // Create a new contact record
-            $contact = new \App\Models\Contact();
-            $contact->type = 'registration';
-            $contact->full_name = $request->input('full_name');
-            $contact->legal_entity_name = $request->input('legal_entity_name');
-            $contact->registration_id = $request->input('registration_id');
-            $contact->country = $request->input('country');
-            $contact->email = $request->input('email');
-            $contact->phone = $request->input('phone');
-            $contact->address = $request->input('address');
-            $contact->city = $request->input('city');
-            $contact->zip_code = $request->input('zip_code');
-            $contact->selected_plan = $request->input('selected_plan');
-            $contact->save();
-
-            // Send confirmation email to user
-            Mail::to($contact->email)->send(new UserRegistrationConfirmation($contact));
-            
-            // Send notification to admin
-            Mail::to(config('mail.admin_email', 'info@lei-register.co.uk'))
-                ->send(new AdminRegistrationNotification($contact));
-            
-            // Get the ID for redirection
-            $contactId = $contact->id;
-            
-            // Log the redirect attempt
-            \Log::info('Redirecting to payment page', ['order_id' => $contactId]);
-
-            // If this is an AJAX/fetch request, return JSON
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success'  => true,
-                    'redirect' => route('payment.show', ['id' => $contactId]),
-                ]);
-            }
-
-           // Fallback: full-page redirect
-           return redirect()->route('payment.show', ['id' => $contactId]);
-            
-        } catch (\Exception $e) {
-            // Log the error
-            \Log::error('Registration error: ' . $e->getMessage());
-            
-            // Return with error
-            return redirect()->back()
-                    ->with('error', 'An error occurred: ' . $e->getMessage())
-                    ->withInput();
         }
     }
     
@@ -398,11 +489,36 @@ class GleifController extends Controller
                 'terms' => 'required',
             ]);
             
-            // Store bulk registration inquiry in database
-            // This would be implemented based on your application's data model
+            // Create a contact record for bulk registration inquiry
+            $contact = new Contact();
+            $contact->type = 'bulk_registration';
+            $contact->full_name = $validated['first_name'] . ' ' . $validated['last_name'];
+            $contact->legal_entity_name = $validated['company_name'];
+            $contact->country = $validated['country'];
+            $contact->email = $validated['email'];
+            $contact->phone = $validated['phone'];
+            $contact->payment_status = 'inquiry';
+            $contact->registration_id = 'BULK-' . time();
+            $contact->address = '';
+            $contact->city = '';
+            $contact->zip_code = '';
+            $contact->selected_plan = 'bulk';
+            $contact->amount = 0;
             
-            // Send notification email to staff
-            // This would be implemented using Laravel's mail functionality
+            // Associate with logged-in user if exists
+            if (Auth::check()) {
+                $contact->user_id = Auth::id();
+            }
+            
+            $contact->save();
+            
+            // Send notification email to admin
+            try {
+                Mail::to(config('mail.admin_email', 'info@lei-register.co.uk'))
+                    ->send(new \App\Mail\BulkRegistrationInquiry($contact));
+            } catch (\Exception $mailException) {
+                Log::error('Failed to send bulk registration notification: ' . $mailException->getMessage());
+            }
             
             // Redirect to confirmation page
             return redirect()->route('bulk.confirmation')->with('success', 'Bulk registration request submitted successfully');

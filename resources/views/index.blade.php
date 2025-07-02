@@ -185,7 +185,7 @@
                                     
                                 </div>
                                 
-                                <form id="register-form" action="{{ route('register.submit') }}" method="POST">
+                                <form id="register-form" action="{{ route('register.submit') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <input type="hidden" name="selected_plan" id="selected_plan" value="3-years">
 
@@ -320,12 +320,20 @@
                                                 </div>
                                             </div>
 
+                                            <!-- Replace the existing file upload sections with this code -->
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <p class="upload-instruction">Upload your company excerpt</p>
-                                                    <div class="upload-area">
-                                                        <div class="upload-icon"><i class="fa fa-upload"></i></div>
-                                                        <div class="upload-text">Browse files or drag and drop</div>
+                                                    <div class="upload-area" id="company-excerpt-upload">
+                                                        <input type="file" name="company_excerpt" id="company_excerpt" class="file-input" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="display: none;">
+                                                        <div class="upload-content">
+                                                            <div class="upload-icon"><i class="fa fa-upload"></i></div>
+                                                            <div class="upload-text">Browse files or drag and drop</div>
+                                                            <div class="file-info" style="display: none;">
+                                                                <span class="file-name"></span>
+                                                                <button type="button" class="remove-file" title="Remove file">×</button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -333,9 +341,16 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <p class="upload-instruction">Upload your ID</p>
-                                                    <div class="upload-area">
-                                                        <div class="upload-icon"><i class="fa fa-upload"></i></div>
-                                                        <div class="upload-text">Browse files or drag and drop</div>
+                                                    <div class="upload-area" id="user-id-upload">
+                                                        <input type="file" name="user_id_document" id="user_id_document" class="file-input" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="display: none;">
+                                                        <div class="upload-content">
+                                                            <div class="upload-icon"><i class="fa fa-upload"></i></div>
+                                                            <div class="upload-text">Browse files or drag and drop</div>
+                                                            <div class="file-info" style="display: none;">
+                                                                <span class="file-name"></span>
+                                                                <button type="button" class="remove-file" title="Remove file">×</button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

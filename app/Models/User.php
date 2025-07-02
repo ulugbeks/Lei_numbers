@@ -45,4 +45,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function leiRegistrations()
+    {
+        return $this->hasMany(Contact::class, 'user_id');
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->name;
+    }
 }

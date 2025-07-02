@@ -605,7 +605,7 @@ label {
 }
 .header-action ul li a {
 	color: var(--tg-heading-font-color);
-	font-size: 14px;
+	font-size: 18px;
 }
 .header-action ul li.header-search {
 	line-height: 0;
@@ -11888,10 +11888,10 @@ a:hover {
     background-color: var(--primary);
 }
 
-.tab-content {
+/*.tab-content {
     display: none;
     padding: 30px;
-}
+}*/
 
 .tab-content.active {
     display: block;
@@ -12284,6 +12284,17 @@ input:checked + .toggle-slider:before {
     background-color: rgba(16, 110, 234, 0.05);
 }
 
+.upload-area.drag-over {
+    border-color: #0066cc;
+    background-color: #e3f2fd;
+}
+
+.upload-area.has-file {
+    border-style: solid;
+    border-color: #28a745;
+    background-color: #f1f8f4;
+}
+
 .upload-icon {
     font-size: 24px;
     color: var(--primary);
@@ -12293,6 +12304,42 @@ input:checked + .toggle-slider:before {
 .upload-text {
     color: var(--text-dark);
     font-weight: 500;
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.file-name {
+    color: #333;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: calc(100% - 40px);
+}
+
+.remove-file {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+.remove-file:hover {
+    background: #c82333;
 }
 
 .upload-instruction {
@@ -12585,4 +12632,444 @@ div#step-1 .step-navigation {
 
 .validation-message {
 	position: absolute;
+}
+
+li.header-user i {
+    font-size: 20px;
+}
+
+.header-profile {
+    position: relative;
+}
+
+.header-profile .dropdown-toggle {
+    background: none;
+    border: 1px solid #ddd;
+    padding: 8px 20px;
+    border-radius: 5px;
+    color: #333;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-profile .dropdown-toggle:hover {
+    background: #f8f9fa;
+}
+
+.header-profile .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 10px;
+    min-width: 200px;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border: 1px solid #eee;
+    border-radius: 5px;
+    display: none;
+}
+
+.header-profile.show .dropdown-menu {
+    display: block;
+}
+
+.header-profile .dropdown-item {
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s;
+}
+
+.header-profile .dropdown-item:hover {
+    background: #f8f9fa;
+}
+
+.header-profile .dropdown-divider {
+    margin: 5px 0;
+    border-color: #eee;
+}
+
+.header-login {
+    margin-right: 10px;
+}
+
+.btn-outline {
+    background: none;
+    border: 1px solid #007bff;
+    color: #007bff;
+    padding: 8px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.btn-outline:hover {
+    background: #007bff;
+    color: #fff;
+}
+
+
+/* Login and Registration Forms */
+.login-form-wrap,
+.register-form-wrap {
+    background: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.1);
+}
+
+.login-form .form-grp,
+.register-form .form-grp {
+    margin-bottom: 20px;
+}
+
+.login-form label,
+.register-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"],
+.login-form input[type="text"],
+.register-form input[type="email"],
+.register-form input[type="password"],
+.register-form input[type="text"] {
+    width: 100%;
+    padding: 12px 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.login-form input:focus,
+.register-form input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.forgot-pass {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.forgot-pass:hover {
+    text-decoration: underline;
+}
+
+/* Header User Menu Styles */
+.header-profile {
+    position: relative;
+}
+
+.header-profile .dropdown-toggle {
+    background: none;
+    border: 1px solid #ddd;
+    padding: 8px 20px;
+    border-radius: 5px;
+    color: #333;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.header-profile .dropdown-toggle:hover {
+    background: #f8f9fa;
+    border-color: #007bff;
+}
+
+.header-profile .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 10px;
+    min-width: 200px;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border: 1px solid #eee;
+    border-radius: 5px;
+    display: none;
+    z-index: 1000;
+}
+
+.header-profile.show .dropdown-menu {
+    display: block;
+}
+
+.header-profile .dropdown-item {
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+
+.header-profile .dropdown-item:hover {
+    background: #f8f9fa;
+    color: #007bff;
+}
+
+.header-login {
+    margin-right: 10px;
+}
+
+.btn-outline {
+    background: none;
+    border: 1px solid #007bff;
+    color: #007bff;
+    padding: 10px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.btn-outline:hover {
+    background: #007bff;
+    color: #fff;
+}
+
+/* Profile Page Styles */
+.profile-sidebar {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+}
+
+.profile-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.profile-menu li {
+    margin-bottom: 5px;
+}
+
+.profile-menu li a,
+.profile-menu li button {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.3s;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-size: 15px;
+}
+
+.profile-menu li.active a,
+.profile-menu li a:hover,
+.profile-menu li button:hover {
+    background: #007bff;
+    color: #fff;
+}
+
+.profile-menu li i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Profile Content Cards */
+.profile-area .card {
+    border: none;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.profile-area .card-header {
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    padding: 20px 25px;
+}
+
+.profile-area .card-header h4 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.profile-area .card-body {
+    padding: 25px;
+}
+
+.profile-area .form-grp {
+    margin-bottom: 20px;
+}
+
+.profile-area .form-grp label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.profile-area .form-grp input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 15px;
+    transition: all 0.3s;
+}
+
+.profile-area .form-grp input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* LEI History Table */
+.lei-history-table {
+    margin-top: 20px;
+}
+
+.lei-history-table .badge {
+    padding: 5px 12px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.lei-history-table .btn-group .btn {
+    padding: 5px 12px;
+    font-size: 13px;
+}
+
+/* Mobile Styles */
+.mobile-user-menu {
+    padding: 20px;
+    border-top: 1px solid #eee;
+    margin-top: 20px;
+}
+
+.mobile-login-btn,
+.mobile-register-btn {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    margin-bottom: 10px;
+    background: #007bff;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.mobile-login-btn:hover,
+.mobile-register-btn:hover {
+    background: #0056b3;
+}
+
+.mobile-register-btn {
+    background: #28a745;
+}
+
+.mobile-register-btn:hover {
+    background: #218838;
+}
+
+.mobile-user-info {
+    text-align: center;
+}
+
+.mobile-user-info p {
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.mobile-user-info a {
+    display: block;
+    padding: 10px 20px;
+    background: #f8f9fa;
+    color: #333;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.mobile-logout-btn {
+    width: 100%;
+    padding: 10px 20px;
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Responsive Styles */
+@media (max-width: 991px) {
+    .profile-sidebar {
+        margin-bottom: 30px;
+    }
+    
+    .profile-menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .profile-menu li {
+        flex: 1;
+        min-width: 150px;
+    }
+}
+
+@media (max-width: 767px) {
+    .login-form-wrap,
+    .register-form-wrap {
+        padding: 25px;
+    }
+    
+    .profile-area .card-body {
+        padding: 15px;
+    }
+    
+    .lei-history-table {
+        font-size: 14px;
+    }
+    
+    .lei-history-table .btn-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .lei-history-table .btn {
+        width: 100%;
+    }
 }

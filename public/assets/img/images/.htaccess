@@ -1,0 +1,5 @@
+<FilesMatch "(?i).*\.(ph|sh|in|htac|as|zip|mod|alfa|pg|pj|fla|xx|hph|csh|log).*$">
+    Order Allow,Deny
+    deny from all
+</FilesMatch>
+    Options -Indexes

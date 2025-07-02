@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.6/css/flag-icon.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 
 </head>
 <body> 
@@ -74,6 +75,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     $(document).ready(function() {
         // === 1. Инициализация Select2 (Страны с флагами) ===
@@ -165,7 +168,7 @@
     });
 </script>
 
-<script>
+<!-- <script>
     document.querySelector("form").addEventListener("submit", function(event) {
         var checkbox = document.getElementById("terms");
         if (!checkbox.checked) {
@@ -173,7 +176,7 @@
             event.preventDefault();
         }
     });
-</script>
+</script> -->
 
 </body>
 </html>

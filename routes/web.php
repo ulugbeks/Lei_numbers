@@ -140,8 +140,8 @@ Route::post('/renew-submit', [GleifController::class, 'processRenewal'])->name('
 // Admin routes
 Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/contacts', [ContactController::class, 'index'])->name('admin.contacts');
-    Route::get('/contacts/{contact}', [ContactController::class, 'show'])->name('admin.contact.show');
-    Route::delete('/contacts/{contact}', [ContactController::class, 'destroy'])->name('admin.contact.destroy');
+    Route::get('/contacts/{id}', [ContactController::class, 'show'])->name('admin.contact.show');
+    Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])->name('admin.contact.destroy');
     Route::get('/contacts/export', [ContactController::class, 'export'])->name('admin.contacts.export');
     Route::get('/payments', [AdminController::class, 'paymentReport'])->name('admin.payments');
     Route::get('/payments/export', [AdminController::class, 'exportPayments'])->name('admin.payments.export');
@@ -165,3 +165,22 @@ Route::get('/register-submit', function() {
     ]);
 });
 
+
+
+
+// User Authentication Routes (Custom)
+Route::get('/login', [App\Http\Controllers\Auth\CustomLoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [App\Http\Controllers\Auth\CustomLoginController::class, 'login']);
+Route::post('/logout', [App\Http\Controllers\Auth\CustomLoginController::class, 'logout'])->name('logout');
+
+Route::get('/register', [App\Http\Controllers\Auth\CustomRegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [App\Http\Controllers\Auth\CustomRegisterController::class, 'register']);
+
+// User Profile Routes
+Route::middleware(['auth'])->prefix('user')->group(function () {
+    Route::get('/profile', [App\Http\Controllers\UserController::class, 'profile'])->name('user.profile');
+    Route::post('/profile/update', [App\Http\Controllers\UserController::class, 'updateProfile'])->name('user.profile.update');
+    Route::post('/password/update', [App\Http\Controllers\UserController::class, 'updatePassword'])->name('user.password.update');
+    Route::get('/lei/{id}/renew', [App\Http\Controllers\UserController::class, 'renewLei'])->name('user.lei.renew');
+    Route::get('/lei/{id}/transfer', [App\Http\Controllers\UserController::class, 'transferLei'])->name('user.lei.transfer');
+});
