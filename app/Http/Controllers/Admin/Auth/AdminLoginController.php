@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 
-class CustomLoginController extends Controller
+class AdminLoginController extends Controller
 {
     use ThrottlesLogins;
 
@@ -33,17 +33,17 @@ class CustomLoginController extends Controller
     }
 
     /**
-     * Show the login form
+     * Show the admin login form
      *
      * @return \Illuminate\View\View
      */
     public function showLoginForm()
     {
-        return view('auth.custom-login');
+        return view('admin.auth.login');
     }
 
     /**
-     * Handle login request
+     * Handle admin login request
      *
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
@@ -79,30 +79,18 @@ class CustomLoginController extends Controller
 
             $user = Auth::user();
             
-            // Block admin users from logging in through regular login
-            if ($user->isAdmin()) {
+            // Check if user is admin
+            if (!$user->isAdmin()) {
                 Auth::logout();
-                return redirect()->back()
-                    ->withErrors([
-                        'email' => 'Admin users must login through the admin portal.',
-                    ])
-                    ->withInput($request->only('email', 'remember'));
+                return redirect()->route('admin.login')
+                    ->withErrors(['email' => 'Access denied. Admin privileges required.']);
             }
             
-            // Log the successful login
-            \Log::info('User logged in', ['user_id' => $user->id, 'email' => $user->email, 'role' => $user->role]);
+            // Log the successful admin login
+            \Log::info('Admin logged in', ['user_id' => $user->id, 'email' => $user->email]);
 
-            // Check if there's an intended URL for regular users
-            if (session()->has('url.intended')) {
-                $intended = session('url.intended');
-                // Make sure intended URL is not an admin URL
-                if (!str_contains($intended, 'backend') && !str_contains($intended, 'admin')) {
-                    return redirect()->intended();
-                }
-            }
-            
-            // Default redirect for regular users
-            return redirect()->route('user.profile');
+            // Redirect to admin dashboard
+            return redirect()->intended(route('admin.dashboard'));
         }
 
         // If unsuccessful, increment login attempts
@@ -117,7 +105,7 @@ class CustomLoginController extends Controller
     }
 
     /**
-     * Log the user out
+     * Log the admin out
      *
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
@@ -126,7 +114,7 @@ class CustomLoginController extends Controller
     {
         // Log the logout action
         if (Auth::check()) {
-            \Log::info('User logged out', ['user_id' => Auth::id(), 'email' => Auth::user()->email]);
+            \Log::info('Admin logged out', ['user_id' => Auth::id(), 'email' => Auth::user()->email]);
         }
 
         Auth::logout();
@@ -134,7 +122,7 @@ class CustomLoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/')->with('success', 'You have been successfully logged out.');
+        return redirect()->route('admin.login')->with('success', 'You have been successfully logged out.');
     }
 
     /**
@@ -176,6 +164,6 @@ class CustomLoginController extends Controller
      */
     protected function throttleKey(Request $request)
     {
-        return strtolower($request->input($this->username())) . '|' . $request->ip();
+        return 'admin_' . strtolower($request->input($this->username())) . '|' . $request->ip();
     }
 }

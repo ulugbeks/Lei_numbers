@@ -14,7 +14,8 @@ use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Admin\MenuController;
-use App\Http\Controllers\GleifController; 
+use App\Http\Controllers\GleifController;
+use App\Http\Controllers\Admin\Auth\AdminLoginController;
 
 Auth::routes();
 
@@ -88,12 +89,22 @@ Route::post('/check-email', [App\Http\Controllers\Auth\CustomRegisterController:
 Route::post('/check-username', [App\Http\Controllers\Auth\CustomRegisterController::class, 'checkUsername'])->name('check.username');
 
 // ============================
+// ADMIN LOGIN ROUTES
+// ============================
+
+// Admin login routes (no auth required)
+Route::get('/backend', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
+Route::get('/backend/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login.form');
+Route::post('/backend/login', [AdminLoginController::class, 'login'])->name('admin.login.submit');
+Route::post('/backend/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
+
+// ============================
 // ADMIN ROUTES (Admin role required)
 // ============================
 
 Route::middleware(['auth', 'admin'])->prefix('backend')->group(function () {
     // Dashboard
-    Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     
     // Contacts management
     Route::get('/contacts', [ContactController::class, 'index'])->name('admin.contacts');
@@ -197,4 +208,4 @@ Route::get('/{slug}', [PageController::class, 'show'])->name('page.show')
     ->where('slug', '!=', 'renew')
     ->where('slug', '!=', 'transfer')
     ->where('slug', '!=', 'bulk')
-    ->where('slug', '!=', 'user'); // Add user exclusion
+    ->where('slug', '!=', 'user');
