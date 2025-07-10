@@ -45,7 +45,7 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('register') }}" method="POST" class="register-form">
+                        <form action="{{ route('register') }}" method="POST" class="register-form" id="registration-form">
                             @csrf
                             
                             <!-- Account Information Section -->

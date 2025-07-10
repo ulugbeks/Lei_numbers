@@ -19,6 +19,11 @@
                     <a class="nav-link" href="{{ url('/dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.users.index') }}">
+                        <i class="fas fa-users"></i> Users
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{{ url('/backend/contacts') }}"><i class="fas fa-envelope"></i> Contacts</a>
                 </li>
                 <li class="nav-item">
@@ -63,6 +68,12 @@
                             <a href="{{ url('/backend') }}" class="nav-link">
                                 <i class="nav-icon fas fa-home"></i>
                                 <p>Dashboard</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.users.index') }}" class="nav-link">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>Users</p>
                             </a>
                         </li>
                         <li class="nav-item">

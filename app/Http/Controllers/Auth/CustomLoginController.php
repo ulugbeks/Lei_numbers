@@ -77,24 +77,27 @@ class CustomLoginController extends Controller
             $request->session()->regenerate();
             $this->clearLoginAttempts($request);
 
-            // Check if user is admin (you can modify this logic)
             $user = Auth::user();
             
-            // Log the successful login (optional - using Laravel's built-in logging)
-            \Log::info('User logged in', ['user_id' => $user->id, 'email' => $user->email]);
+            // Log the successful login
+            \Log::info('User logged in', ['user_id' => $user->id, 'email' => $user->email, 'role' => $user->role]);
 
-            // Redirect based on user type
-            if ($this->isAdmin($user)) {
-                return redirect()->intended('/backend');
+            // Redirect based on user role
+            if ($user->isAdmin()) {
+                return redirect()->route('admin.dashboard');
+            } else {
+                // Check if there's an intended URL for regular users
+                if (session()->has('url.intended')) {
+                    $intended = session('url.intended');
+                    // Make sure intended URL is not an admin URL
+                    if (!str_contains($intended, 'backend') && !str_contains($intended, 'admin')) {
+                        return redirect()->intended();
+                    }
+                }
+                
+                // Default redirect for regular users
+                return redirect()->route('user.profile');
             }
-
-            // Check if there's an intended URL (where user was trying to go)
-            if (session()->has('url.intended')) {
-                return redirect()->intended();
-            }
-
-            // Default redirect to user profile
-            return redirect()->route('user.profile');
         }
 
         // If unsuccessful, increment login attempts
@@ -137,30 +140,6 @@ class CustomLoginController extends Controller
     public function username()
     {
         return 'email';
-    }
-
-    /**
-     * Check if user is admin
-     *
-     * @param \App\Models\User $user
-     * @return bool
-     */
-    protected function isAdmin($user)
-    {
-        // You can implement your own admin check logic here
-        // For example, check if email matches admin emails
-        $adminEmails = [
-            'admin@lei-register.co.uk',
-            'admin@example.com'
-        ];
-
-        return in_array($user->email, $adminEmails);
-        
-        // Or check if user has admin role (if you have roles)
-        // return $user->hasRole('admin');
-        
-        // Or check if user has is_admin column
-        // return $user->is_admin;
     }
 
     /**

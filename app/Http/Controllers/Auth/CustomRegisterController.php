@@ -184,6 +184,7 @@ class CustomRegisterController extends Controller
             'city' => $data['city'],
             'state' => $data['state'] ?? null,
             'postal_code' => $data['postal_code'],
+            'role' => 'user',
             'terms_accepted' => true,
             'privacy_accepted' => true,
             'terms_accepted_at' => now(),

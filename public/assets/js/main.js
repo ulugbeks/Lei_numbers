@@ -1899,22 +1899,138 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+// Registration form handler
 document.addEventListener('DOMContentLoaded', function() {
-    // Header dropdown functionality
-    const dropdownToggle = document.querySelector('.header-profile .dropdown-toggle');
-    const headerProfile = document.querySelector('.header-profile');
+    const registrationForm = document.getElementById('registration-form');
     
-    if (dropdownToggle) {
-        dropdownToggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            headerProfile.classList.toggle('show');
+    if (registrationForm) {
+        // Add client-side validation
+        registrationForm.addEventListener('submit', function(e) {
+            // Get form elements
+            const password = document.getElementById('password').value;
+            const passwordConfirm = document.getElementById('password_confirmation').value;
+            const terms = document.getElementById('terms').checked;
+            const privacy = document.getElementById('privacy').checked;
+            
+            // Validate passwords match
+            if (password !== passwordConfirm) {
+                e.preventDefault();
+                alert('Passwords do not match!');
+                return false;
+            }
+            
+            // Validate password length
+            if (password.length < 8) {
+                e.preventDefault();
+                alert('Password must be at least 8 characters long!');
+                return false;
+            }
+            
+            // Validate terms and privacy
+            if (!terms || !privacy) {
+                e.preventDefault();
+                alert('You must accept the Terms of Service and Privacy Policy!');
+                return false;
+            }
+            
+            // Form is valid, let it submit
+            return true;
         });
         
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!headerProfile.contains(e.target)) {
-                headerProfile.classList.remove('show');
-            }
-        });
+        // Real-time password validation
+        const passwordInput = document.getElementById('password');
+        const passwordConfirmInput = document.getElementById('password_confirmation');
+        
+        if (passwordConfirmInput) {
+            passwordConfirmInput.addEventListener('input', function() {
+                if (this.value !== passwordInput.value) {
+                    this.setCustomValidity('Passwords do not match');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+        }
     }
 });
+
+// Username availability check
+function checkUsernameAvailability() {
+    const username = document.getElementById('username').value;
+    
+    if (username.length < 3) {
+        return;
+    }
+    
+    fetch('/check-username', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ username: username })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const usernameInput = document.getElementById('username');
+        const helpText = document.getElementById('username-help');
+        
+        if (data.available) {
+            usernameInput.classList.remove('is-invalid');
+            usernameInput.classList.add('is-valid');
+            if (helpText) {
+                helpText.textContent = 'Username is available';
+                helpText.classList.remove('text-danger');
+                helpText.classList.add('text-success');
+            }
+        } else {
+            usernameInput.classList.remove('is-valid');
+            usernameInput.classList.add('is-invalid');
+            if (helpText) {
+                helpText.textContent = data.message;
+                helpText.classList.remove('text-success');
+                helpText.classList.add('text-danger');
+            }
+        }
+    });
+}
+
+// Email availability check
+function checkEmailAvailability() {
+    const email = document.getElementById('email').value;
+    
+    if (!email || !email.includes('@')) {
+        return;
+    }
+    
+    fetch('/check-email', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ email: email })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const emailInput = document.getElementById('email');
+        const helpText = document.getElementById('email-help');
+        
+        if (data.available) {
+            emailInput.classList.remove('is-invalid');
+            emailInput.classList.add('is-valid');
+            if (helpText) {
+                helpText.textContent = 'Email is available';
+                helpText.classList.remove('text-danger');
+                helpText.classList.add('text-success');
+            }
+        } else {
+            emailInput.classList.remove('is-valid');
+            emailInput.classList.add('is-invalid');
+            if (helpText) {
+                helpText.textContent = data.message;
+                helpText.classList.remove('text-success');
+                helpText.classList.add('text-danger');
+            }
+        }
+    });
+}

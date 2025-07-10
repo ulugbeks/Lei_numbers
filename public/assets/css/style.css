@@ -13073,3 +13073,12 @@ li.header-user i {
         width: 100%;
     }
 }
+
+ul.dropdown-menu.show li {
+    margin-left: 0;
+}
+
+#lei-history .btn-warning {
+	padding: 2px 5px;
+	border-radius: 5px;
+}

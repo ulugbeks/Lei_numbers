@@ -39,6 +39,7 @@ class User extends Authenticatable
         'privacy_accepted',
         'terms_accepted_at',
         'privacy_accepted_at',
+        'role', // Add role to fillable
     ];
 
     /**
@@ -66,6 +67,26 @@ class User extends Authenticatable
             'terms_accepted_at' => 'datetime',
             'privacy_accepted_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Check if user is an admin
+     *
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Check if user is a regular user
+     *
+     * @return bool
+     */
+    public function isUser(): bool
+    {
+        return $this->role === 'user';
     }
 
     /**

@@ -138,34 +138,77 @@
 
 
 <script>
-    $(document).ready(function() {
-        $('.register-form').on('submit', function(e) {
-            e.preventDefault(); // Отменяем стандартное поведение формы
-
-            let formData = $(this).serialize(); // Собираем данные формы
-
-            $.ajax({
-                url: "{{ url('/contact-submit') }}",
-                type: "POST",
-                data: formData,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    $('.register-form').trigger('reset'); // Очищаем форму
-                    $('#success-message').text(response.success).fadeIn().delay(3000).fadeOut();
-                },
-                error: function(xhr) {
-                    let errors = xhr.responseJSON.errors;
-                    let errorMessage = "An error occurred.";
-                    if (errors) {
-                        errorMessage = Object.values(errors).join("<br>");
+$(document).ready(function() {
+    // Handle registration form submission
+    $('#registration-form').on('submit', function(e) {
+        // Don't prevent default - let the form submit normally
+        // Remove e.preventDefault();
+        
+        // Optional: Add loading state
+        var submitBtn = $(this).find('button[type="submit"]');
+        var originalText = submitBtn.text();
+        submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Processing...');
+        
+        // The form will submit normally through POST
+    });
+    
+    // If you want AJAX registration, use this instead:
+    /*
+    $('#registration-form').on('submit', function(e) {
+        e.preventDefault();
+        
+        var form = $(this);
+        var submitBtn = form.find('button[type="submit"]');
+        var originalText = submitBtn.text();
+        
+        // Disable button and show loading
+        submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Processing...');
+        
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                // Redirect to profile or show success message
+                window.location.href = "{{ route('user.profile') }}";
+            },
+            error: function(xhr) {
+                // Re-enable button
+                submitBtn.prop('disabled', false).text(originalText);
+                
+                // Show validation errors
+                if (xhr.status === 422) {
+                    var errors = xhr.responseJSON.errors;
+                    
+                    // Clear previous errors
+                    $('.text-danger').remove();
+                    $('.is-invalid').removeClass('is-invalid');
+                    
+                    // Display new errors
+                    $.each(errors, function(field, messages) {
+                        var input = $('[name="' + field + '"]');
+                        input.addClass('is-invalid');
+                        input.after('<span class="text-danger">' + messages[0] + '</span>');
+                    });
+                    
+                    // Scroll to first error
+                    var firstError = $('.is-invalid').first();
+                    if (firstError.length) {
+                        $('html, body').animate({
+                            scrollTop: firstError.offset().top - 100
+                        }, 500);
                     }
-                    $('#error-message').html(errorMessage).fadeIn().delay(5000).fadeOut();
+                } else {
+                    alert('An error occurred during registration. Please try again.');
                 }
-            });
+            }
         });
     });
+    */
+});
 </script>
 
 <!-- <script>
