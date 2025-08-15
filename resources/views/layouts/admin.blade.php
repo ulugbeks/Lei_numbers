@@ -31,6 +31,11 @@
                         <i class="fas fa-file-lines"></i> Pages
                     </a>
                 </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.documents.index') }}">
+                        <i class="fas fa-file-alt"></i> Documents
+                    </a>
+                </li> -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('admin.blogs.index') }}">
                         <i class="fas fa-newspaper"></i> News
@@ -88,6 +93,12 @@
                                 <p>Pages</p>
                             </a>
                         </li>
+                        <!-- <li class="nav-item">
+                            <a href="{{ route('admin.documents.index') }}" class="nav-link">
+                                <i class="nav-icon fas fa-file-alt"></i>
+                                <p>Documents</p>
+                            </a>
+                        </li> -->
                         <li class="nav-item">
                             <a href="{{ route('admin.blogs.index') }}" class="nav-link">
                                 <i class="nav-icon fas fa-newspaper"></i>

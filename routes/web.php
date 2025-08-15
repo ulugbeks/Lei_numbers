@@ -16,6 +16,8 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\GleifController;
 use App\Http\Controllers\Admin\Auth\AdminLoginController;
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 
 Auth::routes();
 
@@ -32,6 +34,11 @@ Route::get('/registration-lei', [PageController::class, 'registrationLei'])->nam
 Route::get('/cookies', [PageController::class, 'cookies'])->name('cookies');
 Route::get('/terms-and-conditions', [PageController::class, 'terms'])->name('terms-and-conditions');
 Route::get('/privacy-policy', [PageController::class, 'privacy'])->name('privacy-policy');
+
+// Documents page (public)
+Route::get('/documents', [App\Http\Controllers\DocumentController::class, 'index'])->name('documents');
+Route::get('/documents/{document}/download', [App\Http\Controllers\DocumentController::class, 'download'])->name('documents.download');
+Route::get('/documents/{document}/preview', [App\Http\Controllers\DocumentController::class, 'preview'])->name('documents.preview');
 
 // News routes
 Route::get('/news', [FrontBlogController::class, 'blogList'])->name('blog.index');
@@ -175,6 +182,18 @@ Route::middleware(['auth', 'admin'])->prefix('backend')->group(function () {
         Route::delete('/{id}', [App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('destroy');
         Route::post('/{id}/toggle-status', [App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('toggle-status');
     });
+
+    //documents admin
+    Route::prefix('documents')->name('admin.documents.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\DocumentController::class, 'index'])->name('index');
+    Route::get('/create', [App\Http\Controllers\Admin\DocumentController::class, 'create'])->name('create');
+    Route::post('/', [App\Http\Controllers\Admin\DocumentController::class, 'store'])->name('store');
+    Route::get('/{document}/edit', [App\Http\Controllers\Admin\DocumentController::class, 'edit'])->name('edit');
+    Route::put('/{document}', [App\Http\Controllers\Admin\DocumentController::class, 'update'])->name('update');
+    Route::delete('/{document}', [App\Http\Controllers\Admin\DocumentController::class, 'destroy'])->name('destroy');
+    Route::post('/{document}/toggle-status', [App\Http\Controllers\Admin\DocumentController::class, 'toggleStatus'])->name('toggle-status');
+    Route::post('/update-order', [App\Http\Controllers\Admin\DocumentController::class, 'updateOrder'])->name('update-order');
+});
 });
 
 // Admin payment routes (using 'admin' prefix instead of 'backend')
