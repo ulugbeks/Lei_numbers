@@ -92,6 +92,15 @@ Route::post('/check-username', [App\Http\Controllers\Auth\CustomRegisterControll
 // ADMIN LOGIN ROUTES
 // ============================
 
+
+// Redirect /backend to appropriate location based on auth status
+Route::get('/backend', function () {
+    if (Auth::check() && Auth::user()->isAdmin()) {
+        return redirect()->route('admin.dashboard');
+    }
+    return redirect()->route('admin.login');
+});
+
 // Admin login routes (no auth required)
 Route::get('/backend', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
 Route::get('/backend/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login.form');
@@ -209,3 +218,17 @@ Route::get('/{slug}', [PageController::class, 'show'])->name('page.show')
     ->where('slug', '!=', 'transfer')
     ->where('slug', '!=', 'bulk')
     ->where('slug', '!=', 'user');
+
+
+// sitemap
+Route::get('/sitemap.xml', function() {
+    $path = public_path('sitemap.xml');
+    
+    if (file_exists($path)) {
+        return response()->file($path, [
+            'Content-Type' => 'application/xml',
+        ]);
+    }
+    
+    abort(404);
+});

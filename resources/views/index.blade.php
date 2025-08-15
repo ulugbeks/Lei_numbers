@@ -141,10 +141,10 @@
                                             <h4 class="plan-title">1 year</h4>
                                         </div>
                                         <div class="plan-price">
-                                            <span class="currency">£</span>75
-                                            <span class="period">/ year</span>
+                                            <!--<span class="currency">€</span>-->59
+                                            <span class="period">€ /year</span>
                                         </div>
-                                        <div class="plan-total">Total £75</div>
+                                        <div class="plan-total">Total €59</div>
                                         <button class="plan-select-btn">Select Plan</button>
                                     </div>
                                     
@@ -154,10 +154,10 @@
                                             <h4 class="plan-title">3 years</h4>
                                         </div>
                                         <div class="plan-price">
-                                            <span class="currency">£</span>65
-                                            <span class="period">/ year</span>
+                                            55
+                                            <span class="period">€ /year</span>
                                         </div>
-                                        <div class="plan-total">Total £195</div>
+                                        <div class="plan-total">Total €165</div>
                                         <button class="plan-select-btn">Select Plan</button>
                                     </div>
                                     
@@ -166,10 +166,10 @@
                                             <h4 class="plan-title">5 years</h4>
                                         </div>
                                         <div class="plan-price">
-                                            <span class="currency">£</span>55
-                                            <span class="period">/ year</span>
+                                            50
+                                            <span class="period">€ /year</span>
                                         </div>
-                                        <div class="plan-total">Total £275</div>
+                                        <div class="plan-total">Total €250</div>
                                         <button class="plan-select-btn">Select Plan</button>
                                     </div>
                                 </div>
@@ -391,7 +391,7 @@
                                                 <div class="terms-checkbox">
                                                     <input type="checkbox" id="terms" name="terms" required>
                                                     <label for="terms">
-                                                        I accept LEI Register's <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a> <span class="required">*</span>
+                                                        I agree to the <a href="{{ route('privacy-policy') }}" target="_blank">Privacy Policy</a> and <a href="{{ route('terms-and-conditions') }}" target="_blank">Terms and Conditions</a>. <span class="required">*</span>
                                                     </label>
                                                 </div>
                                             </div>
@@ -600,7 +600,7 @@
                                     <div class="terms-checkbox">
                                         <input type="checkbox" id="bulk-terms" name="terms" required>
                                         <label for="bulk-terms">
-                                            I accept LEI Register's <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a> <span class="required">*</span>
+                                            I agree to the <a href="{{ route('privacy-policy') }}" target="_blank">Privacy Policy</a> and <a href="{{ route('terms-and-conditions') }}" target="_blank">Terms and Conditions</a>. <span class="required">*</span>
                                         </label>
                                     </div>
                                 </div>
@@ -769,7 +769,7 @@
 									<a href="tel:{{ preg_replace('/[^0-9+]/', '', $request['phone_number'] ?? '+123 8989 444') }}">{{ $request['phone_number'] ?? '+123 8989 444' }}</a>
 								</div>
                                 <div class="content">
-                                    <a href="mailto:info@lei-register.co.uk">info@lei-register.co.uk</a>
+                                    <a href="mailto:info@trustedlei.eu">info@trustedlei.eu</a>
                                 </div>
 							</div>
 							<div class="request-btn">

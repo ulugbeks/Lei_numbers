@@ -23,14 +23,13 @@ class RedirectIfAuthenticated
             if (Auth::guard($guard)->check()) {
                 $user = Auth::guard($guard)->user();
                 
-                // Check if we're on admin login page
+                // Check if we're on admin login pages
                 if ($request->is('backend') || $request->is('backend/login')) {
                     // If user is already logged in as admin, redirect to admin dashboard
                     if ($user->isAdmin()) {
                         return redirect()->route('admin.dashboard');
                     }
-                    // If regular user trying to access admin login, let them see the page
-                    // They'll get an error when trying to login
+                    // If regular user trying to access admin login, logout and continue
                     Auth::logout();
                     return $next($request);
                 }

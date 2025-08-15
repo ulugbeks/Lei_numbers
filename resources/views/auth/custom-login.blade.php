@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.auth-app')
 
-@section('title', 'Login')
+@section('title', 'Login - Trusted LEI')
 
 @section('content')
 

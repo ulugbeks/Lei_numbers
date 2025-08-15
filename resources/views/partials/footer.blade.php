@@ -6,16 +6,19 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-7">
                         <div class="footer-widget">
-                            <h4 class="fw-title">Information</h4>
+                            <h4 class="fw-title">Location</h4>
                             <div class="footer-info">
                                 <ul class="list-wrap">
-                                    <h5 style="color: #fff;">Bedford Capital</h5>
+                                    <h5 style="color: #fff;">Trusted LEI</h5>
                                     <li>
-                                        <div class="icon">
+                                        <!-- <div class="icon">
                                             <i class="flaticon-pin"></i>
-                                        </div>
+                                        </div> -->
                                         <div class="content">
-                                            <p>International House, 6 South Molton St.<br> London EW1K 5QF, UK</p>
+                                            <div class="content">
+                                            <p>Reg.no. 40103626380</p>
+                                        </div>
+                                            <p>Republikas laukums 3 - 12<br> Riga LV-1010, Latvia</p>
                                         </div>
                                     </li>
                                     <li>
@@ -23,7 +26,7 @@
                                             <i class="flaticon-mail"></i>
                                         </div>
                                         <div class="content">
-                                            <a href="mailto:info@lei-register.co.uk">info@lei-register.co.uk</a>
+                                            <a href="mailto:info@trustedlei.eu">info@trustedlei.eu</a>
                                         </div>
                                     </li>
                                     <li style="display: none;">
@@ -138,7 +141,7 @@
                                 <a href="/"><img src="{{ asset('assets/img/logo/logo-light.svg') }}" alt=""></a>
                             </div> -->
                             <div class="copyright-text">
-                                <p><a href="/"><img src="{{ asset('assets/img/logo/logo-light.svg') }}" alt=""></a> Copyright © 2025. Register LEI | All Rights Reserved.</p>
+                                <p><!--<a href="/"><img src="{{ asset('assets/img/logo/logo-light.svg') }}" alt=""></a>--> Copyright © 2025. Trusted LEI | All Rights Reserved.</p>
                             </div>
                         </div>
                     </div>

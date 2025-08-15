@@ -43,7 +43,7 @@
                         
                         @if(!empty($content['faqs']))
                             <div class="mt-5">
-                                <h2>Frequently Asked Questions</h2>
+                                <!-- <h2>Frequently Asked Questions</h2> -->
                                 <div class="accordion" id="leiAccordion">
                                     @foreach($content['faqs'] as $index => $faq)
                                     <div class="accordion-item">

@@ -659,7 +659,8 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdn.tiny.cloud/1/cutdqhmzvugvtosmcaietdon22xvmds3rwygoa51cvknvrwx/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://cdn.tiny.cloud/1/cutdqhmzvugvtosmcaietdon22xvmds3rwygoa51cvknvrwx/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize TinyMCE for main content
@@ -671,8 +672,24 @@ document.addEventListener('DOMContentLoaded', function() {
         forced_root_block_attrs: {
             'data-mce-empty': '1'  // Custom attribute to identify empty paragraphs
         },
-        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        plugins: 'advlist autolink lists link charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount',
+        toolbar: `undo redo | blocks | bold italic underline strikethrough | 
+                forecolor backcolor | alignleft aligncenter alignright alignjustify | 
+                bullist numlist outdent indent | removeformat | link anchor | 
+                table | code fullscreen preview | help`,
+        font_family_formats: 
+        'System UI=system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;' +
+        'Arial=arial,helvetica,sans-serif;' +
+        'Arial Black=arial black,avant garde;' +
+        'Courier New=courier new,courier;' +
+        'Georgia=georgia,palatino;' +
+        'Helvetica=helvetica;' +
+        'Impact=impact,chicago;' +
+        'Tahoma=tahoma,arial,helvetica,sans-serif;' +
+        'Terminal=terminal,monaco;' +
+        'Times New Roman=times new roman,times;' +
+        'Trebuchet MS=trebuchet ms,geneva;' +
+        'Verdana=verdana,geneva;',
         images_upload_url: "{{ route('admin.pages.upload-image', ['_token' => csrf_token()]) }}",
         // Custom format options
         formats: {
@@ -841,8 +858,24 @@ document.addEventListener('DOMContentLoaded', function() {
             forced_root_block_attrs: {
                 'data-mce-empty': '1'  // Custom attribute to identify empty paragraphs
             },
-            plugins: 'link lists image',
-            toolbar: 'undo redo | bold italic | bullist numlist | link image',
+            plugins: 'advlist autolink lists link charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount',
+            toolbar: `undo redo | blocks | bold italic underline strikethrough | 
+                forecolor backcolor | alignleft aligncenter alignright alignjustify | 
+                bullist numlist outdent indent | removeformat | link anchor | 
+                table | code fullscreen preview | help`,
+            font_family_formats: 
+            'System UI=system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;' +
+            'Arial=arial,helvetica,sans-serif;' +
+            'Arial Black=arial black,avant garde;' +
+            'Courier New=courier new,courier;' +
+            'Georgia=georgia,palatino;' +
+            'Helvetica=helvetica;' +
+            'Impact=impact,chicago;' +
+            'Tahoma=tahoma,arial,helvetica,sans-serif;' +
+            'Terminal=terminal,monaco;' +
+            'Times New Roman=times new roman,times;' +
+            'Trebuchet MS=trebuchet ms,geneva;' +
+            'Verdana=verdana,geneva;',
             images_upload_url: "{{ route('admin.pages.upload-image', ['_token' => csrf_token()]) }}",
         });
     }
@@ -924,8 +957,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     forced_root_block_attrs: {
                         'data-mce-empty': '1'
                     },
-                    plugins: 'link lists image',
-                    toolbar: 'undo redo | bold italic | bullist numlist | link image',
+                    plugins: 'advlist autolink lists link charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount',
+                    toolbar: `undo redo | blocks | bold italic underline strikethrough | 
+                forecolor backcolor | alignleft aligncenter alignright alignjustify | 
+                bullist numlist outdent indent | removeformat | link anchor | 
+                table | code fullscreen preview | help`,
+                font_family_formats: 
+    'System UI=system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;' +
+    'Arial=arial,helvetica,sans-serif;' +
+    'Arial Black=arial black,avant garde;' +
+    'Courier New=courier new,courier;' +
+    'Georgia=georgia,palatino;' +
+    'Helvetica=helvetica;' +
+    'Impact=impact,chicago;' +
+    'Tahoma=tahoma,arial,helvetica,sans-serif;' +
+    'Terminal=terminal,monaco;' +
+    'Times New Roman=times new roman,times;' +
+    'Trebuchet MS=trebuchet ms,geneva;' +
+    'Verdana=verdana,geneva;',
                     images_upload_url: "{{ route('admin.pages.upload-image', ['_token' => csrf_token()]) }}",
                 });
             }

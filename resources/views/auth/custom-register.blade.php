@@ -242,22 +242,12 @@
                                     <div class="form-check mb-3">
                                         <input type="checkbox" class="form-check-input" id="terms" name="terms" value="1" {{ old('terms') ? 'checked' : '' }} required>
                                         <label class="form-check-label" for="terms">
-                                            I have read and agree to the <a href="{{ route('terms-and-conditions') }}" target="_blank">Terms of Service</a>. <span class="required">*</span>
+                                            I agree to the <a href="{{ route('privacy-policy') }}" target="_blank">Privacy Policy</a> and <a href="{{ route('terms-and-conditions') }}" target="_blank">Terms and Conditions</a>. <span class="required">*</span>
                                         </label>
                                         @error('terms')
                                             <span class="text-danger d-block">{{ $message }}</span>
                                         @enderror
-                                    </div>
-                                    
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="privacy" name="privacy" value="1" {{ old('privacy') ? 'checked' : '' }} required>
-                                        <label class="form-check-label" for="privacy">
-                                            I have read and agree to the <a href="{{ route('privacy-policy') }}" target="_blank">Privacy Policy</a>. <span class="required">*</span>
-                                        </label>
-                                        @error('privacy')
-                                            <span class="text-danger d-block">{{ $message }}</span>
-                                        @enderror
-                                    </div>
+                                    </div>        
                                 </div>
                             </div>
 

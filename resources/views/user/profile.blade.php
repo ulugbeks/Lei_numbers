@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.auth-app')
 
-@section('title', 'My Profile')
+@section('title', 'My Profile - Trusted LEI')
 
 @section('content')
 
@@ -69,7 +69,7 @@
                             </li>
                             <li>
                                 <a href="#lei-history" class="tab-link">
-                                    <i class="fas fa-history"></i> LEI Orders
+                                    <i class="fas fa-history"></i> LEI history
                                 </a>
                             </li>
                             <li>
@@ -91,7 +91,7 @@
 
                 <!-- Profile Content -->
                 <div class="col-lg-9">
-                    <div class="tab-content">
+                    <div class="tab-content" style="display: unset; padding: unset;">
                         <!-- Profile Information Tab -->
                         <div class="tab-pane fade show active" id="profile-info">
                             <div class="card">

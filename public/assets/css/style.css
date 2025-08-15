@@ -539,7 +539,7 @@ label {
 .logo img,
 .f-logo img,
 .fw-logo img {
-    max-height: 34px;
+    max-height: 44px;
 }
 
 .logo img {
@@ -562,7 +562,7 @@ label {
 	position: relative;
 }
 .navbar-wrap ul li a {
-	font-size: 16px;
+	font-size: 18px;
 	font-weight: 500;
 /*	text-transform: capitalize;*/
 	color: var(--tg-secondary-color);
@@ -11888,10 +11888,10 @@ a:hover {
     background-color: var(--primary);
 }
 
-/*.tab-content {
+.tab-content {
     display: none;
     padding: 30px;
-}*/
+}
 
 .tab-content.active {
     display: block;
@@ -12018,7 +12018,7 @@ a:hover {
 
 .popular-badge {
     position: absolute;
-    top: 10px;
+    top: 20px;
     right: -30px;
     background-color: var(--secondary);
     color: var(--white);
@@ -12040,7 +12040,7 @@ a:hover {
 }
 
 .plan-price {
-    font-size: 36px;
+    font-size: 66px;
     font-weight: 700;
     color: var(--primary);
     margin-bottom: 15px;
@@ -12054,9 +12054,13 @@ a:hover {
 }
 
 .period {
-    font-size: 14px;
+    font-size: 24px;
     color: var(--text-light);
-    font-weight: 400;
+    font-weight: 500;
+    position: relative;
+    vertical-align: top;
+    top: 15px;
+    right: 15px;
 }
 
 .plan-features {
@@ -13081,4 +13085,8 @@ ul.dropdown-menu.show li {
 #lei-history .btn-warning {
 	padding: 2px 5px;
 	border-radius: 5px;
+}
+
+#bulk-popup-overlay .form-grp select {
+	padding-left: 40px;
 }

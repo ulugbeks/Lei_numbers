@@ -59,12 +59,12 @@ class PaymentController extends Controller
     private function calculateAmount($contact)
     {
         $planPrices = [
-            '1-year' => 75.00,
-            '3-years' => 195.00,
-            '5-years' => 275.00
+            '1-year' => 59.00,
+            '3-years' => 165.00,
+            '5-years' => 250.00
         ];
         
-        return $planPrices[$contact->selected_plan] ?? 75.00;
+        return $planPrices[$contact->selected_plan] ?? 59.00;
     }
     
     /**

@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UsersExport;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -67,21 +68,48 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         
-        $validated = $request->validate([
+        // Base validation rules
+        $rules = [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'company_name' => 'required|string|max:255',
             'phone' => 'required|string|max:50',
             'is_active' => 'boolean'
-        ]);
+        ];
         
-        $user->update($validated);
+        // Add password validation if changing password
+        if ($request->has('change_password') && $request->change_password == '1') {
+            $rules['password'] = 'required|string|min:8|confirmed';
+        }
+        
+        $validated = $request->validate($rules);
+        
+        // Prepare data for update
+        $updateData = [
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'email' => $validated['email'],
+            'company_name' => $validated['company_name'],
+            'phone' => $validated['phone'],
+            'is_active' => $request->has('is_active') ? true : false
+        ];
+        
+        // Update the full name
+        $updateData['name'] = trim($validated['first_name'] . ' ' . $validated['last_name']);
+        
+        // Add password to update data if changing
+        if ($request->has('change_password') && $request->change_password == '1' && !empty($request->password)) {
+            $updateData['password'] = Hash::make($request->password);
+        }
+        
+        // Update the user
+        $user->update($updateData);
         
         return redirect()->route('admin.users.index')
-            ->with('success', 'User updated successfully');
+            ->with('success', 'User updated successfully' . 
+                ($request->has('change_password') && $request->change_password == '1' ? ' and password has been changed.' : '.'));
     }
-    
     /**
      * Delete user
      */

@@ -118,7 +118,7 @@
 				<div class="col-lg-7">
 					<div class="header-top-left">
 						<ul class="list-wrap">
-							<li><i class="flaticon-location"></i>International House, 6 South Molton St. London EW1K 5QF, UK</li>
+							<li>Trusted LEI - trusted by companies worldwide. Powered by expertise. Built for compliance.</li>
 							<!-- <li><i class="flaticon-mail"></i><a href="mailto:gerow@gmail.com">info@lei-register.co.uk</a></li> -->
 						</ul>
 					</div>
@@ -126,7 +126,7 @@
 				<div class="col-lg-5">
 					<div class="header-top-right">
 						<div class="header-contact">
-							<a href="mailto:info@lei-register.co.uk"><i class="flaticon-mail"></i> info@lei-register.co.uk</a>
+							<a href="mailto:info@trustedlei.eu"><i class="flaticon-mail"></i> info@trustedlei.eu</a>
 						</div>
 						<div class="header-social">
 							<ul class="list-wrap">

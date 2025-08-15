@@ -29,16 +29,31 @@ class AdminLoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        // Remove the guest middleware to allow checking auth status
+        // We'll handle the redirect logic in showLoginForm method
     }
 
     /**
      * Show the admin login form
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
     public function showLoginForm()
     {
+        // If user is already logged in
+        if (Auth::check()) {
+            // Check if user is admin
+            if (Auth::user()->isAdmin()) {
+                // Redirect to admin dashboard
+                return redirect()->route('admin.dashboard');
+            } else {
+                // If regular user, logout and show login form
+                Auth::logout();
+                return view('admin.auth.login');
+            }
+        }
+        
+        // If not logged in, show login form
         return view('admin.auth.login');
     }
 

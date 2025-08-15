@@ -1,0 +1,62 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Force HTTPS (optional - uncomment if you want to force HTTPS)
+    # RewriteCond %{HTTPS} !=on
+    # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    
+    # Redirect www to non-www (optional - uncomment if needed)
+    # RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+    # RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+    
+    # Allow direct access to sitemap.xml in public folder
+    RewriteCond %{REQUEST_URI} ^/sitemap\.xml$ [NC]
+    RewriteCond %{DOCUMENT_ROOT}/public/sitemap.xml -f
+    RewriteRule ^(.*)$ /public/$1 [L]
+    
+    # Allow direct access to robots.txt in public folder
+    RewriteCond %{REQUEST_URI} ^/robots\.txt$ [NC]
+    RewriteCond %{DOCUMENT_ROOT}/public/robots.txt -f
+    RewriteRule ^(.*)$ /public/$1 [L]
+    
+    # Allow direct access to favicon files
+    RewriteCond %{REQUEST_URI} ^/favicon\.(ico|png)$ [NC]
+    RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -f
+    RewriteRule ^(.*)$ /public/$1 [L]
+    
+    # If the requested URI does not start with /public/, rewrite to /public/...
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ /public/$1 [L,QSA]
+</IfModule>
+
+# Security Headers (optional but recommended)
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Disable directory browsing
+Options -Indexes
+
+# Block access to hidden files and directories
+<IfModule mod_rewrite.c>
+    RewriteCond %{SCRIPT_FILENAME} -d [OR]
+    RewriteCond %{SCRIPT_FILENAME} -f
+    RewriteRule "(^|/)\." - [F]
+</IfModule>
+
+# Block access to backup and source files
+<FilesMatch "(\.(bak|backup|config|dist|fla|inc|ini|log|psd|sh|sql|swp)|~)$">
+    Order allow,deny
+    Deny from all
+    Satisfy All
+</FilesMatch>
+
+# Set correct MIME types
+<IfModule mod_mime.c>
+    AddType application/xml xml
+    AddType text/xml sitemap
+    AddType text/plain txt
+    AddType application/json json
+</IfModule>
