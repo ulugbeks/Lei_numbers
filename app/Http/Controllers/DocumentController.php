@@ -16,6 +16,21 @@ class DocumentController extends Controller
     {
         // Get the page for SEO
         $page = Page::where('slug', 'documents')->first();
+
+        // If page doesn't exist, create it with default values
+        if (!$page) {
+            $page = Page::create([
+                'name' => 'Documents',
+                'title' => 'Documents',
+                'slug' => 'documents',
+                'status' => true,
+                'meta_title' => 'Documents - Trusted LEI',
+                'meta_description' => 'Download important documents, forms, and resources for LEI registration and management.',
+                'content' => json_encode([
+                    'main_content' => '<p>Access our collection of important documents and resources for LEI registration.</p>'
+                ])
+            ]);
+        }
         
         // Get active documents ordered
         $documents = Document::active()->ordered()->paginate(20);

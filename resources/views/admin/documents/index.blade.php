@@ -7,9 +7,19 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Documents</h5>
-            <a href="{{ route('admin.documents.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus-circle"></i> Upload New Document
-            </a>
+            <div>
+                @php
+                    $documentsPage = \App\Models\Page::where('slug', 'documents')->first();
+                @endphp
+                @if($documentsPage)
+                    <a href="{{ route('admin.pages.edit', $documentsPage->id) }}" class="btn btn-info me-2">
+                        <i class="fas fa-cog"></i> Page SEO Settings
+                    </a>
+                @endif
+                <a href="{{ route('admin.documents.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus-circle"></i> Upload New Document
+                </a>
+            </div>
         </div>
         <div class="card-body">
             @if(session('success'))
@@ -23,6 +33,17 @@
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     {{ session('error') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            <!-- Info Alert about SEO Settings -->
+            @if(!$documentsPage)
+                <div class="alert alert-warning" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> 
+                    <strong>SEO Settings Missing:</strong> 
+                    The Documents page is not found in the database. Please create it in 
+                    <a href="{{ route('admin.pages.index') }}" class="alert-link">Pages management</a> 
+                    with slug "documents" to manage SEO settings.
                 </div>
             @endif
             

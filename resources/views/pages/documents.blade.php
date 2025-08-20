@@ -72,9 +72,9 @@
                                                     <span class="meta-item">
                                                         <i class="fas fa-weight"></i> {{ $document->formatted_file_size }}
                                                     </span>
-                                                    <span class="meta-item">
+                                                    <!-- <span class="meta-item">
                                                         <i class="fas fa-download"></i> {{ $document->download_count }} downloads
-                                                    </span>
+                                                    </span> -->
                                                 </div>
                                             </div>
                                         </div>

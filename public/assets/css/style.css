@@ -11794,7 +11794,7 @@ body {
 }
 
 a {
-    color: var(--primary);
+    color: var(--primary-light);
     text-decoration: none;
     transition: var(--transition);
 }

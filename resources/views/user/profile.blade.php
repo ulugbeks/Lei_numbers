@@ -50,12 +50,12 @@
 
             <div class="row">
                 <!-- Profile Sidebar -->
-                <div class="col-lg-3">
+                <div class="col-lg-12">
                     <div class="profile-sidebar">
                         <div class="profile-info text-center mb-4">
-                            <div class="profile-avatar mb-3">
+                            <!-- <div class="profile-avatar mb-3">
                                 <i class="fas fa-user-circle" style="font-size: 100px; color: #ccc;"></i>
-                            </div>
+                            </div> -->
                             <h4>{{ $user->full_name }}</h4>
                             <!-- <p class="text-muted">@{{ $user->username }}</p> -->
                             <p class="text-muted">{{ $user->email }}</p>
@@ -64,7 +64,12 @@
                         <ul class="profile-menu">
                             <li class="active">
                                 <a href="#profile-info" class="tab-link">
-                                    <i class="fas fa-user"></i> Profile Information
+                                    <i class="fas fa-user"></i> My profile
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/documents" class="tab-link">
+                                    <i class="fas fa-file"></i> Documents
                                 </a>
                             </li>
                             <li>
@@ -90,7 +95,7 @@
                 </div>
 
                 <!-- Profile Content -->
-                <div class="col-lg-9">
+                <div class="col-lg-12">
                     <div class="tab-content" style="display: unset; padding: unset;">
                         <!-- Profile Information Tab -->
                         <div class="tab-pane fade show active" id="profile-info">
@@ -133,21 +138,21 @@
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="col-md-2">
+                                                <div class="col-md-3">
                                                     <div class="form-grp">
                                                         <label for="middle_name">Middle Name</label>
                                                         <input type="text" id="middle_name" name="middle_name" value="{{ $user->middle_name }}">
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="col-md-5">
+                                                <div class="col-md-3">
                                                     <div class="form-grp">
                                                         <label for="last_name">Last Name</label>
                                                         <input type="text" id="last_name" name="last_name" value="{{ $user->last_name }}" required>
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="col-md-2">
+                                                <div class="col-md-3">
                                                     <div class="form-grp">
                                                         <label for="suffix">Suffix</label>
                                                         <input type="text" id="suffix" name="suffix" value="{{ $user->suffix }}">
@@ -160,14 +165,14 @@
                                         <div class="form-section mb-4">
                                             <h5 class="section-title">Company & Contact Information</h5>
                                             <div class="row">
-                                                <div class="col-md-12">
+                                                <div class="col-md-6">
                                                     <div class="form-grp">
-                                                        <label for="company_name">Company Name</label>
+                                                        <label for="company_name">Legal Name</label>
                                                         <input type="text" id="company_name" name="company_name" value="{{ $user->company_name }}" required>
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="col-md-3">
+                                                <!-- <div class="col-md-3">
                                                     <div class="form-grp">
                                                         <label for="phone_country_code">Country Code</label>
                                                         <select name="phone_country_code" id="phone_country_code" class="form-control">
@@ -179,9 +184,9 @@
                                                             <option value="+371" {{ $user->phone_country_code == '+371' ? 'selected' : '' }}>+371 (LV)</option>
                                                         </select>
                                                     </div>
-                                                </div>
+                                                </div> -->
                                                 
-                                                <div class="col-md-9">
+                                                <div class="col-md-6">
                                                     <div class="form-grp">
                                                         <label for="phone">Phone Number</label>
                                                         <input type="tel" id="phone" name="phone" value="{{ $user->phone }}" required>
@@ -261,8 +266,8 @@
                                             <table class="table table-striped">
                                                 <thead>
                                                     <tr>
-                                                        <th>LEI Code</th>
-                                                        <th>Company Name</th>
+                                                        <th>LEI</th>
+                                                        <th>Legal Name</th>
                                                         <th>Plan</th>
                                                         <th>Status</th>
                                                         <th>Date</th>
@@ -372,6 +377,8 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    display: flex;
+    justify-content: space-around;
 }
 
 .profile-menu li {
